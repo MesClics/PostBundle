@@ -19,9 +19,13 @@ class PostRetriever{
         $this->em = $em;
         $this->token_storage = $token_storage;
         $this->repository = $this->em->getRepository('MesClicsPostBundle:Post');
-        $this->order = 'ASC'; //par défaut le critère de tri @order est ascendant.
         $this->limit = false; //par défaut on retourne un nb infini de résutlats.
         $this->order_by = 'date-creation'; //par défaut on trie les posts par date de création.
+        if(preg_match('/^date-/m', $this->order_by)){//par défaut le critère de tri @order est ascendant sauf lorsque le critère de tri commence par date_
+            $this->order = 'DESC';
+        } else{
+            $this->order = 'ASC'; 
+        }
         $this->filter = null; //par défaut on ne filtre pas les posts.
     }
 

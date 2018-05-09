@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PostController extends Controller
 {
+    
     public function initializePostRetriever(Request $request){
         //on récupère les posts
         $post_retriever = $this
@@ -38,11 +39,16 @@ class PostController extends Controller
 
         //SORT
         if($request->query->get('sort')){
+            
             $sort = $request->query->get('sort');
             // var_dump($sort);
         } else{
-            //par défaut on trie apr ordre croissant
-            $sort = 'ASC';
+            //par défaut on trie apr ordre croissant saud si le critère de tri commence par date-
+            if(!preg_match('/^date-/m', $post_retriever->getOrderBy())){
+                $sort = 'ASC';
+            } else{
+                $sort = 'DESC';
+            }
         }
         $post_retriever->setOrder($sort);
 

@@ -49,16 +49,16 @@
                 {% if order_by is defined and order_by is same as ('date-publication-debut') %}
                     {% set sort_param = sort_inv %}
                 {% else %}
-                    {% set sort_param = 'ASC' %}
+                    {% set sort_param = 'DESC' %}
                 {% endif %}
-                <a href="{{ path('mesclics_admin_posts', {'filter': filter|default(null), 'order-by': 'date-publication-debut', 'sort': sort_param }) }}" class="[ oocss-table-col-sort ] sort-{{ sort|default('asc') }} {% if order_by is defined and order_by is same as ('date-publication-debut') %}oocss-active {% endif %}">publiée le</a>
+                <a href="{{ path('mesclics_admin_posts', {'filter': filter|default(null), 'order-by': 'date-publication-debut', 'sort': sort_param }) }}" class="[ oocss-table-col-sort ] sort-{{ sort|default('desc') }} {% if order_by is defined and order_by is same as ('date-publication-debut') %}oocss-active {% endif %}">publiée le</a>
             </th>
             {# DATE DE PEREMPTION #}
             <th>
                 {% if order_by is defined and order_by is same as ('date-publication-fin') %}
                     {% set sort_param = sort_inv %}
                 {% else %}
-                    {% set sort_param = 'ASC' %}
+                    {% set sort_param = 'DESC' %}
                 {% endif %}
                 <a href="{{ path('mesclics_admin_posts', {'filter': filter|default(null), 'order-by': 'date-publication-fin', 'sort': sort_param }) }}" class="[ oocss-table-col-sort  {% if order_by is defined and order_by is same as ('date-publication-fin') %}oocss-active {% endif %}] sort-{{ sort|default('asc') }}">dépubliée le</a>
             </th>
