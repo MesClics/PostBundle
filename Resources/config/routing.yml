@@ -1,0 +1,94 @@
+# routes pour l'administration
+mc_admin_posts:
+    path: /
+    defaults:
+        _controller: MCPostBundle:Post:posts
+
+# mc_admin_posts_desc:
+#     path: _ordre=z-a
+#     defaults:
+#         _controller: MCPostBundle:Post:posts
+#         filter: null
+#         sort: 'DESC'
+
+# mc_admin_posts_date_creation:
+#     path: _tri=date-creation
+#     defaults:
+#         _controller: MCPostBundle:Post:posts
+#         order_by: 'date-creation'
+#         sort: 'ASC'
+
+# mc_admin_posts_date_creation_desc:
+#     path: _tri=date-creation_ordre=z-a
+#     defaults:
+#         _controller: MCPostBundle:Post:posts
+#         order_by: 'date-creation'
+#         sort: 'DESC'
+
+# mc_admin_posts_title:
+#     path: _tri=titres
+#     defaults:
+#         _controller: MCPostBundle:Post:posts
+#         order-by: 'titre'
+#         sort: 'ASC'
+
+# mc_admin_posts_title_desc:
+#     path: _tri=titres_ordre=z-a
+#     defaults:
+#         _controller: MCPostBundle:Post:posts
+#         order-by: 'titre'
+#         sort: 'DESC'
+
+# mc_admin_posts_date_publication:
+#     path: _tri=date-publication-debut
+#     defaults:
+#         _controller: MCPostBundle:Post:posts
+#         order-by: 'date-publication-debut'
+#         sort: 'ASC'
+
+# mc_admin_posts_date_publication_desc:
+#     path: _tri=date-publication-debut_ordre=z-a
+#     defaults:
+#         _controller: MCPostBundle:Post:posts
+#         order-by: 'date-publication-debut'
+#         sort: 'DESC'
+
+# mc_admin_posts_date_depublication:
+#     path: _tri=date-publication-fin
+#     defaults:
+#         _controller: MCPostBundle:Post:posts
+#         order-by: 'date-publication-fin'
+#         sort: 'ASC'
+
+# mc_admin_posts_date_depublication_desc:
+#     path: _tri=date-publication-fin_ordre=z-a
+#     defaults:
+#         _controller: MCPostBundle:Post:posts
+#         order-by: 'date-depublication-fin'
+#         sort: 'DESC'
+
+# mc_admin_posts_online:
+#     path: /en-ligne
+#     defaults:
+#         _controller: MCPostBundle:Post:onlinePosts
+
+# mc_admin_posts_online_desc:
+#     path: /en-ligne
+#     defaults:
+#         _controller: MCPostBundle:Post:onlinePosts
+#         sort: 'DESC'
+
+# mc_admin_posts_draft:
+#     path: /brouillons
+#     defaults:
+#         _controller: MCPostBundle:Post:draftPosts
+
+mc_admin_posts_new:
+    path: /new/
+    defaults:
+        _controller: MCPostBundle:Post:new
+
+mc_admin_post:
+    path: /{post_id}/
+    defaults:
+        _controller: MCPostBundle:Post:edit

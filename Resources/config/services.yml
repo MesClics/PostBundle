@@ -1,0 +1,30 @@
+services:
+#    mc_post.example:
+#        class: MC\PostBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
+
+  mc_post.form_manager.new:
+    class: MC\PostBundle\Form\FormManager\PostFormManager
+    arguments:
+      - "@doctrine.orm.entity_manager"
+      - "@request_stack"
+      - "@session"
+
+  mc_post.retriever:
+    class: MC\PostBundle\PostRetriever\PostRetriever
+    arguments:
+      - "@doctrine.orm.entity_manager"
+      - "@security.token_storage"
+
+  mc_post.counter:
+    class: MC\PostBundle\PostCounter\PostCounter
+    arguments:
+      - "@doctrine.orm.entity_manager"
+      - "@security.token_storage"
+  
+  mc_post.twig.counter:
+    class: MC\PostBundle\Twig\PostCounterExtension
+    arguments:
+      - "@mc_post.counter"
+    tags:
+      - { name: twig.extension }

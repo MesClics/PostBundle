@@ -1,0 +1,129 @@
+{% if sort is not defined or sort is same as ('ASC') %}
+    {% set sort_inv = 'DESC' %}
+{% else %}
+    {% set sort_inv = 'ASC' %}
+{% endif %}
+
+{% if posts is defined %}
+    <h2 class="[ oocss-title-section ]">Liste des publications</h2>
+    <ul class = "[ oocss-block oocss-horizontal oocss-center-h ]">
+    <!-- <ul class = "[ oocss-legend oocss-legend__d__list oocss-legend__s__horizontal ]"> -->
+        {% if filter is defined and filter is not null %}
+            <li class="[ oocss-headed-block oocss-horizontal ]">
+                <a href="{{ path('mc_admin_posts') }}" class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]"> <span class="[ oocss-index oocss-icone ] all_posts"></span>toutes les publications</a>
+            </li>
+        {% endif %}
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'online'}) }}"><span class="[ oocss-index ] online_posts"></span>en ligne</a></li>
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'online-with-peremption'}) }}"><span class="[ oocss-index ] onlineWithPeremption_posts"></span>en ligne avec péremption</a></li>
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'to-be-published'}) }}"><span class="[ oocss-index ] toBePublished_posts"></span>à venir</a></li>
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'unpublished'}) }}"><span class="[ oocss-index ] unpublished_posts"></span>dépubliée</a></li>
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'draft'}) }}"><span class="[ oocss-index ] draft_posts"></span>brouillon</a></li>
+    </ul>
+    <ul class="[ oocss-block oocss-horizontal oocss-center-h ]">
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'public'}) }}"><span class="[ oocss-index oocss-icone ] public_posts"></span>publique</a></li>
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'private'}) }}"><span class="[ oocss-index oocss-icone ] private_posts"></span>privée</a></li>
+    </ul>
+    <table class="[ oocss-table ]">
+        <tr class="[ oocsss-table-head-row ]">
+            <th></th>
+            {# DATE DE CREATION #}
+            <th>
+                {% if order_by is not defined or order_by is same as ('date-creation') %}
+                    {% set sort_param = sort_inv %}
+                {% else %}
+                    {% set sort_param = 'ASC' %}
+                {% endif %}
+                <a href="{{ path('mc_admin_posts', {'filter': filter|default(null), 'order-by': 'date-creation', 'sort': sort_param }) }}" class="[ oocss-table-col-sort {% if order_by is not defined or order_by is same as ('date-creation') %}oocss-active {% endif %}] sort-{{ sort|default('asc') }}">créée le</a>
+            </th>
+            {# TITRE DU POST #}
+            <th>
+                {% if order_by is defined and order_by is same as ('titre') %}
+                    {% set sort_param = sort_inv %}
+                {% else %}
+                    {% set sort_param = 'ASC' %}
+                {% endif %}
+                <a href="{{ path('mc_admin_posts', {'filter': filter|default(null), 'order-by': 'titre', 'sort': sort_param }) }}" class="[ oocss-table-col-sort ] sort-{{ sort|default('asc') }} {% if order_by is defined and order_by is same as ('titre') %}oocss-active {% endif %}">titre</a>
+            </th>
+            {# DATE DE PUBLICATION #}
+            <th>
+                {% if order_by is defined and order_by is same as ('date-publication-debut') %}
+                    {% set sort_param = sort_inv %}
+                {% else %}
+                    {% set sort_param = 'ASC' %}
+                {% endif %}
+                <a href="{{ path('mc_admin_posts', {'filter': filter|default(null), 'order-by': 'date-publication-debut', 'sort': sort_param }) }}" class="[ oocss-table-col-sort ] sort-{{ sort|default('asc') }} {% if order_by is defined and order_by is same as ('date-publication-debut') %}oocss-active {% endif %}">publiée le</a>
+            </th>
+            {# DATE DE PEREMPTION #}
+            <th>
+                {% if order_by is defined and order_by is same as ('date-publication-fin') %}
+                    {% set sort_param = sort_inv %}
+                {% else %}
+                    {% set sort_param = 'ASC' %}
+                {% endif %}
+                <a href="{{ path('mc_admin_posts', {'filter': filter|default(null), 'order-by': 'date-publication-fin', 'sort': sort_param }) }}" class="[ oocss-table-col-sort  {% if order_by is defined and order_by is same as ('date-publication-fin') %}oocss-active {% endif %}] sort-{{ sort|default('asc') }}">dépubliée le</a>
+            </th>
+        </tr>
+
+        {% for post in posts %}
+            <tr class="[ oocss-table-row oocss-table-row__d__post ]">
+                <td class="[ oocss-table-data__d__discret oocss-table-data__s__horizontal ]">
+                    {% if post.isOnline %}
+                        {% if post.willBeUnpublished %}
+                            <span class="[ oocss-index ] onlineWithPeremption_posts"></span>
+                        {% else %}
+                            <span class="[ oocss-index ] online_posts"></span>
+                        {% endif %}
+                    {% endif %}
+                    {% if post.willBePublished %}<span class="[ oocss-index ] toBePublished_posts"></span>{% endif %}
+                    {% if post.hasBeenPublished and not post.isOnline %}<span class="[ oocss-index ] unpublished_posts"></span>{% endif %}
+                    {% if post.isDraft %}<span class="[ oocss-index ] draft_posts"></span>{% endif %}
+                    
+                    {% if post.visibilite is same as ('public') %}<span class="[ oocss-index oocss-icone ] public_posts"></span>{% endif %} {% if post.visibilite is same as ('private') %}
+                    <span class="[ oocss-index oocss-icone ] private_posts"></span>{% endif %}
+                </td>
+                <td class="[ oocss-table-data ]">
+                    {{ post.dateCreation | date('d/m/y') }} à {{ post.dateCreation | date('H:i') }}
+                </td>
+                <td class="[ oocss-table-data ]">
+                    <a class="[ oocss-table-link ]" href="{{ path('mc_admin_post', { 'post_id': post.id }) }}">{{ post.title }}</a>
+                </td>
+                <td class="[ oocss-table-data ]">
+                    {% if post.datePublication is not null %}
+                        {{ post.datePublication | date('d/m/y') }} à {{ post.datePublication | date('H:i') }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td class="[ oocss-table-data ]">
+                    {% if post.datePeremption is not null %}
+                        {{ post.datePeremption | date('d/m/y') }} à {{ post.datePeremption | date('H:i') }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    {% if filter is defined %}
+        {% if filter is same as ('online') %}
+            {% set alert_message = 'Aucune de vos publications n\'est en ligne actuellement.' %}
+
+        {% elseif filter is same as ('online-with-peremption') %} {% set alert_message = 'Aucune de vos publications actuellement en ligne n\'a de date de fin de publication prévue.' %}
+
+        {% elseif filter is same as ('to-be-published') %} {% set alert_message = 'Aucune de vos publications n\'est actuellement programmée pour une mise en ligne prochaine.' %}
+
+        {% elseif filter is same as ('unpublished') %} {% set alert_message = 'Aucune de vos publications n\'a encore passé sa date de fin de publication.' %}
+
+        {% elseif filter is same as ('online') %} {% set alert_message = 'Aucune de vos publications n\'est actuellement enregistrée en tant que brouillon.' %}
+        {% endif %}
+    {% else %}
+        {% set alert_message = 'Vous n\'avez encore aucune publication à votre nom.' %}
+    {% endif %}
+
+
+    <p class="[ oocss-block oocss-vertical oocss-center-all ]">
+        {{ alert_message }}
+        <a class="[ oocss-button oocss-headed-block oocss-horizontal oocss-s ] publication-new" href="{{ path('mc_admin_posts_new') }}">Ajouter une nouvelle publication</a>
+    </p>
+{% endif %}
