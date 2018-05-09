@@ -1,6 +1,6 @@
 <?php
 
-namespace MC\PostBundle\Form;
+namespace MesClics\PostBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -59,7 +59,7 @@ class PostType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MC\PostBundle\Entity\Post'
+            'data_class' => 'MesClics\PostBundle\Entity\Post'
         ));
     }
 
@@ -68,7 +68,7 @@ class PostType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'mc_postbundle_post';
+        return 'mesclics_postbundle_post';
     }
 
 

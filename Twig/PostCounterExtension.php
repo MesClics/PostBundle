@@ -1,7 +1,7 @@
 <?php
-namespace MC\PostBundle\Twig;
+namespace MesClics\PostBundle\Twig;
 
-use MC\PostBundle\PostCounter\PostCounter;
+use MesClics\PostBundle\PostCounter\PostCounter;
 
 class PostCounterExtension extends \Twig_Extension{
     private $post_counter;
@@ -21,6 +21,6 @@ class PostCounterExtension extends \Twig_Extension{
     }
 
     public function getName(){
-        return 'MCPostCounter';
+        return 'MesClicsPostCounter';
     }
 }

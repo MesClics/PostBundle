@@ -1,7 +1,7 @@
 <?php
 
-namespace MC\PostBundle\Repository;
-use MC\UserBundle\Entity\User;
+namespace MesClics\PostBundle\Repository;
+use MesClics\UserBundle\Entity\User;
 
 /**
  * PostRepository

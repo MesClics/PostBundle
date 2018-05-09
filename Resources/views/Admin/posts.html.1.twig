@@ -2,11 +2,11 @@
     <h2 class="[ oocss-title-section ]">Liste des publications</h2>
     <ul class = "[ oocss-block oocss-horizontal oocss-center-h ]">
     <!-- <ul class = "[ oocss-legend oocss-legend__d__list oocss-legend__s__horizontal ]"> -->
-        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'online'}) }}"><span class="[ oocss-index ] online_posts"></span>en ligne</a></li>
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mesclics_admin_posts', {'filter': 'online'}) }}"><span class="[ oocss-index ] online_posts"></span>en ligne</a></li>
         <li class = "[ oocss-headed-block oocss-horizontal ]"><span class="[ oocss-index ] onlineWithPeremption_posts"></span>en ligne avec péremption</li>
         <li class = "[ oocss-headed-block oocss-horizontal ]"><span class="[ oocss-index ] toBePublished_posts"></span>publication à venir</li>
         <li class = "[ oocss-headed-block oocss-horizontal ]"><span class="[ oocss-index ] hasBeenPublished_posts"></span>publication périmée</li>
-        <li><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'draft'}) }}"><span class="[ oocss-index ] draft_posts"></span>brouillon</a></li>
+        <li><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mesclics_admin_posts', {'filter': 'draft'}) }}"><span class="[ oocss-index ] draft_posts"></span>brouillon</a></li>
     </ul>
     <ul class="[ oocss-block oocss-horizontal oocss-center-h ]">
         <li class = "[ oocss-headed-block oocss-horizontal ]"><span class="[ oocss-index oocss-icone ] public_post"></span>publique</li>
@@ -19,17 +19,17 @@
             <th>
                 {% if (postDateCreationSort is defined) %}
                     {% if postDateCreationSort is same as ('ASC') %}
-                        {% set sortByDateCreationPath = 'mc_admin_posts_date_creation_desc' %}
+                        {% set sortByDateCreationPath = 'mesclics_admin_posts_date_creation_desc' %}
                         {# {% set sortByDateCreationSymbol = '↓' %} #}
                         {% set sortByDateCreationClass = 'oocss-table-col-sort-desc' %}
                     {% endif %}
                     {% if postDateCreationSort is same as ('DESC') %}
-                        {% set sortByDateCreationPath = 'mc_admin_posts_date_creation' %}
+                        {% set sortByDateCreationPath = 'mesclics_admin_posts_date_creation' %}
                         {# {% set sortByDateCreationSymbol = '↑' %} #}
                         {% set sortByDateCreationClass = 'oocss-table-col-sort-asc' %}
                     {% endif %}
                 {% else %}
-                    {% set sortByDateCreationPath = 'mc_admin_posts_date_creation' %}
+                    {% set sortByDateCreationPath = 'mesclics_admin_posts_date_creation' %}
                     {% set sortByDateCreationClass = 'oocss-table-col-sort-undefined' %}
                 {% endif %}
                 <a href="{{ path(sortByDateCreationPath) }}" class="[ oocss-table-col-sort ] {{ sortByDateCreationClass }}">date de création</a>
@@ -38,17 +38,17 @@
             <th>
                 {% if (postTitleSort is defined)%}
                     {% if postTitleSort is same as ('ASC') %}
-                        {% set sortByTitlePath = 'mc_admin_posts_title_desc' %}
+                        {% set sortByTitlePath = 'mesclics_admin_posts_title_desc' %}
                         {# {% set sortByTitleSymbol = '↓' %} #}
                         {% set sortByTitleClass = 'oocss-table-col-sort-desc' %}
                     {% endif %}
                     {% if postTitleSort is same as ('DESC') %}
-                        {% set sortByTitlePath = 'mc_admin_posts_title' %}
+                        {% set sortByTitlePath = 'mesclics_admin_posts_title' %}
                         {# {% set sortByTitleSymbol = '↑' %} #}
                         {% set sortByTitleClass = 'oocss-table-col-sort-asc' %}
                     {% endif %}
                 {% else %}
-                    {% set sortByTitlePath = 'mc_admin_posts_title_desc' %}
+                    {% set sortByTitlePath = 'mesclics_admin_posts_title_desc' %}
                     {% set sortByTitleClass = 'oocss-table-col-sort-undefined' %}
                 {% endif %}
 
@@ -58,17 +58,17 @@
             <th>
                 {% if (postDatePublicationSort is defined) %}
                     {% if postDatePublicationSort is same as ('ASC') %}
-                        {% set sortByDatePublicationPath = 'mc_admin_posts_date_publication_desc' %}
+                        {% set sortByDatePublicationPath = 'mesclics_admin_posts_date_publication_desc' %}
                         {# {% set sortByDatePublicationSymbol = '↓' %} #}
                         {% set sortByDatePublicationClass = 'oocss-table-col-sort-desc' %}
                     {% endif %}
                     {% if postDatePublicationSort is same as ('DESC') %}
-                        {% set sortByDatePublicationPath = 'mc_admin_posts_date_publication' %}
+                        {% set sortByDatePublicationPath = 'mesclics_admin_posts_date_publication' %}
                         {# {% set sortByDatePublicationSymbol = '↑' %} #}
                         {% set sortByDatePublicationClass = 'oocss-table-col-sort-asc' %}
                     {% endif %}
                 {% else %}
-                    {% set sortByDatePublicationPath = 'mc_admin_posts_date_publication_desc' %}
+                    {% set sortByDatePublicationPath = 'mesclics_admin_posts_date_publication_desc' %}
                     {% set sortByDatePublicationClass = 'oocss-table-col-sort-undefined' %}
                 {% endif %}
 
@@ -79,17 +79,17 @@
             <th>
                 {% if (postDatePeremptionSort is defined) %}
                     {% if postDatePeremptionSort is same as ('ASC') %}
-                        {% set sortByDatePeremptionPath = 'mc_admin_posts_date_depublication_desc' %}
+                        {% set sortByDatePeremptionPath = 'mesclics_admin_posts_date_depublication_desc' %}
                         {# {% set sortByDatePeremptionSymbol = '↓' %} #}
                         {% set sortByDatePeremptionClass = 'oocss-table-col-sort-desc' %}
                     {% endif %}
                     {% if postDatePeremptionSort is same as ('DESC') %}
-                        {% set sortByDatePeremptionPath = 'mc_admin_posts_date_depublication' %}
+                        {% set sortByDatePeremptionPath = 'mesclics_admin_posts_date_depublication' %}
                         {# {% set sortByDatePeremptionSymbol = '↑' %} #}
                         {% set sortByDatePeremptionClass = 'oocss-table-col-sort-asc' %}
                     {% endif %}
                 {% else %}
-                    {% set sortByDatePeremptionPath = 'mc_admin_posts_date_depublication_desc' %}
+                    {% set sortByDatePeremptionPath = 'mesclics_admin_posts_date_depublication_desc' %}
                     {% set sortByDatePeremptionClass = 'oocss-table-col-sort-undefined' %}
                 {% endif %}
 
@@ -118,7 +118,7 @@
                     {{ post.dateCreation | date('d/m/y') }} à {{ post.dateCreation | date('H:i') }}
                 </td>
                 <td class="[ oocss-table-data ]">
-                    <a class="[ oocss-table-link ]" href="{{ path('mc_admin_post', { 'post_id': post.id }) }}">{{ post.title }}</a>
+                    <a class="[ oocss-table-link ]" href="{{ path('mesclics_admin_post', { 'post_id': post.id }) }}">{{ post.title }}</a>
                 </td>
                 <td class="[ oocss-table-data ]">
                     {% if post.datePublication is not null %}
@@ -139,6 +139,6 @@
     </table>
 {% else %}
     <p class="[ oocss-block oocss-vertical oocss-center-all ]">Vous n'avez encore aucune publication à votre nom. Lancez-vous en ajoutant une
-        <a class="[ oocss-button oocss-headed-block oocss-horizontal oocss-s ] publication-new" href="{{ path('mc_admin_posts_new') }}">Nouvelle publication</a>
+        <a class="[ oocss-button oocss-headed-block oocss-horizontal oocss-s ] publication-new" href="{{ path('mesclics_admin_posts_new') }}">Nouvelle publication</a>
     </p>
 {% endif %}

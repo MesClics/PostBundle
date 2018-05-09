@@ -6,13 +6,13 @@
         <ul class="[ oocss-sub_section-nav-bloc--content ]">
             {% if posts is defined or countPosts('all') > 0 %}
                 <li>
-                    <a class="[ oocss-button oocss-discret oocss-headed-block oocss-horizontal oocss-s ] publications-all" href="{{ path('mc_admin_posts') }}">Toutes les publications
+                    <a class="[ oocss-button oocss-discret oocss-headed-block oocss-horizontal oocss-s ] publications-all" href="{{ path('mesclics_admin_posts') }}">Toutes les publications
                     <span class="[ oocss-index oocss-index__d__lateral ]">{{ countPosts('all') }}</span></a>
                 </li>
             {% endif %}
             <!-- <li class="[ oocss-sub_section-nav--item oocss-sub_section-nav--item__d__new_post ]"> -->
             <li>
-                <a class="[ oocss-button oocss-discret oocss-headed-block oocss-horizontal oocss-s ] publication-new" href="{{ path('mc_admin_posts_new') }}">Nouvelle publication</a>
+                <a class="[ oocss-button oocss-discret oocss-headed-block oocss-horizontal oocss-s ] publication-new" href="{{ path('mesclics_admin_posts_new') }}">Nouvelle publication</a>
             </li>
         </ul>
     </li>
@@ -23,12 +23,12 @@
         <ul class="[ oocss-sub_section-nav-bloc--content ]">
             {% if collections is defined %}
                 <li>
-                    <a class="[ oocss-button oocss-discret oocss-headed-block oocss-horizontal oocss-s ] collections-all" href="{{ path('mc_admin_collections') }}">Toutes les collections</a>
+                    <a class="[ oocss-button oocss-discret oocss-headed-block oocss-horizontal oocss-s ] collections-all" href="{{ path('mesclics_admin_collections') }}">Toutes les collections</a>
                     {# <span class="[ oocss-index oocss-index__d__lateral ]">{{ countCollections('all') }}</span> #}
                 </li>
             {% endif %}
             <li>
-                <a class="[ oocss-button oocss-discret oocss-headed-block oocss-horizontal oocss-s ] collection-new" href="{{ path('mc_admin_collections_new') }}">Nouvelle collection</a>
+                <a class="[ oocss-button oocss-discret oocss-headed-block oocss-horizontal oocss-s ] collection-new" href="{{ path('mesclics_admin_collections_new') }}">Nouvelle collection</a>
             </li>
         </ul>
     </li>

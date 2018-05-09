@@ -1,6 +1,6 @@
 <?php
 
-namespace MC\PostBundle\Repository;
+namespace MesClics\PostBundle\Repository;
 
 /**
  * CollectionRepository

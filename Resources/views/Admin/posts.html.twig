@@ -10,18 +10,18 @@
     <!-- <ul class = "[ oocss-legend oocss-legend__d__list oocss-legend__s__horizontal ]"> -->
         {% if filter is defined and filter is not null %}
             <li class="[ oocss-headed-block oocss-horizontal ]">
-                <a href="{{ path('mc_admin_posts') }}" class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]"> <span class="[ oocss-index oocss-icone ] all_posts"></span>toutes les publications</a>
+                <a href="{{ path('mesclics_admin_posts') }}" class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]"> <span class="[ oocss-index oocss-icone ] all_posts"></span>toutes les publications</a>
             </li>
         {% endif %}
-        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'online'}) }}"><span class="[ oocss-index ] online_posts"></span>en ligne</a></li>
-        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'online-with-peremption'}) }}"><span class="[ oocss-index ] onlineWithPeremption_posts"></span>en ligne avec péremption</a></li>
-        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'to-be-published'}) }}"><span class="[ oocss-index ] toBePublished_posts"></span>à venir</a></li>
-        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'unpublished'}) }}"><span class="[ oocss-index ] unpublished_posts"></span>dépubliée</a></li>
-        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'draft'}) }}"><span class="[ oocss-index ] draft_posts"></span>brouillon</a></li>
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mesclics_admin_posts', {'filter': 'online'}) }}"><span class="[ oocss-index ] online_posts"></span>en ligne</a></li>
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mesclics_admin_posts', {'filter': 'online-with-peremption'}) }}"><span class="[ oocss-index ] onlineWithPeremption_posts"></span>en ligne avec péremption</a></li>
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mesclics_admin_posts', {'filter': 'to-be-published'}) }}"><span class="[ oocss-index ] toBePublished_posts"></span>à venir</a></li>
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mesclics_admin_posts', {'filter': 'unpublished'}) }}"><span class="[ oocss-index ] unpublished_posts"></span>dépubliée</a></li>
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mesclics_admin_posts', {'filter': 'draft'}) }}"><span class="[ oocss-index ] draft_posts"></span>brouillon</a></li>
     </ul>
     <ul class="[ oocss-block oocss-horizontal oocss-center-h ]">
-        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'public'}) }}"><span class="[ oocss-index oocss-icone ] public_posts"></span>publique</a></li>
-        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mc_admin_posts', {'filter': 'private'}) }}"><span class="[ oocss-index oocss-icone ] private_posts"></span>privée</a></li>
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mesclics_admin_posts', {'filter': 'public'}) }}"><span class="[ oocss-index oocss-icone ] public_posts"></span>publique</a></li>
+        <li class = "[ oocss-headed-block oocss-horizontal ]"><a class="[ oocss-block oocss-horizontal oocss-center-all oocss-button oocss-discret oocss-no-typo ]" href="{{ path('mesclics_admin_posts', {'filter': 'private'}) }}"><span class="[ oocss-index oocss-icone ] private_posts"></span>privée</a></li>
     </ul>
     <table class="[ oocss-table ]">
         <tr class="[ oocsss-table-head-row ]">
@@ -33,7 +33,7 @@
                 {% else %}
                     {% set sort_param = 'ASC' %}
                 {% endif %}
-                <a href="{{ path('mc_admin_posts', {'filter': filter|default(null), 'order-by': 'date-creation', 'sort': sort_param }) }}" class="[ oocss-table-col-sort {% if order_by is not defined or order_by is same as ('date-creation') %}oocss-active {% endif %}] sort-{{ sort|default('asc') }}">créée le</a>
+                <a href="{{ path('mesclics_admin_posts', {'filter': filter|default(null), 'order-by': 'date-creation', 'sort': sort_param }) }}" class="[ oocss-table-col-sort {% if order_by is not defined or order_by is same as ('date-creation') %}oocss-active {% endif %}] sort-{{ sort|default('asc') }}">créée le</a>
             </th>
             {# TITRE DU POST #}
             <th>
@@ -42,7 +42,7 @@
                 {% else %}
                     {% set sort_param = 'ASC' %}
                 {% endif %}
-                <a href="{{ path('mc_admin_posts', {'filter': filter|default(null), 'order-by': 'titre', 'sort': sort_param }) }}" class="[ oocss-table-col-sort ] sort-{{ sort|default('asc') }} {% if order_by is defined and order_by is same as ('titre') %}oocss-active {% endif %}">titre</a>
+                <a href="{{ path('mesclics_admin_posts', {'filter': filter|default(null), 'order-by': 'titre', 'sort': sort_param }) }}" class="[ oocss-table-col-sort ] sort-{{ sort|default('asc') }} {% if order_by is defined and order_by is same as ('titre') %}oocss-active {% endif %}">titre</a>
             </th>
             {# DATE DE PUBLICATION #}
             <th>
@@ -51,7 +51,7 @@
                 {% else %}
                     {% set sort_param = 'ASC' %}
                 {% endif %}
-                <a href="{{ path('mc_admin_posts', {'filter': filter|default(null), 'order-by': 'date-publication-debut', 'sort': sort_param }) }}" class="[ oocss-table-col-sort ] sort-{{ sort|default('asc') }} {% if order_by is defined and order_by is same as ('date-publication-debut') %}oocss-active {% endif %}">publiée le</a>
+                <a href="{{ path('mesclics_admin_posts', {'filter': filter|default(null), 'order-by': 'date-publication-debut', 'sort': sort_param }) }}" class="[ oocss-table-col-sort ] sort-{{ sort|default('asc') }} {% if order_by is defined and order_by is same as ('date-publication-debut') %}oocss-active {% endif %}">publiée le</a>
             </th>
             {# DATE DE PEREMPTION #}
             <th>
@@ -60,7 +60,7 @@
                 {% else %}
                     {% set sort_param = 'ASC' %}
                 {% endif %}
-                <a href="{{ path('mc_admin_posts', {'filter': filter|default(null), 'order-by': 'date-publication-fin', 'sort': sort_param }) }}" class="[ oocss-table-col-sort  {% if order_by is defined and order_by is same as ('date-publication-fin') %}oocss-active {% endif %}] sort-{{ sort|default('asc') }}">dépubliée le</a>
+                <a href="{{ path('mesclics_admin_posts', {'filter': filter|default(null), 'order-by': 'date-publication-fin', 'sort': sort_param }) }}" class="[ oocss-table-col-sort  {% if order_by is defined and order_by is same as ('date-publication-fin') %}oocss-active {% endif %}] sort-{{ sort|default('asc') }}">dépubliée le</a>
             </th>
         </tr>
 
@@ -85,7 +85,7 @@
                     {{ post.dateCreation | date('d/m/y') }} à {{ post.dateCreation | date('H:i') }}
                 </td>
                 <td class="[ oocss-table-data ]">
-                    <a class="[ oocss-table-link ]" href="{{ path('mc_admin_post', { 'post_id': post.id }) }}">{{ post.title }}</a>
+                    <a class="[ oocss-table-link ]" href="{{ path('mesclics_admin_post', { 'post_id': post.id }) }}">{{ post.title }}</a>
                 </td>
                 <td class="[ oocss-table-data ]">
                     {% if post.datePublication is not null %}
@@ -124,6 +124,6 @@
 
     <p class="[ oocss-block oocss-vertical oocss-center-all ]">
         {{ alert_message }}
-        <a class="[ oocss-button oocss-headed-block oocss-horizontal oocss-s ] publication-new" href="{{ path('mc_admin_posts_new') }}">Ajouter une nouvelle publication</a>
+        <a class="[ oocss-button oocss-headed-block oocss-horizontal oocss-s ] publication-new" href="{{ path('mesclics_admin_posts_new') }}">Ajouter une nouvelle publication</a>
     </p>
 {% endif %}

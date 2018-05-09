@@ -1,11 +1,11 @@
 <?php
 
-namespace MC\PostBundle\Controller;
+namespace MesClics\PostBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use MC\PostBundle\Entity\Post;
-use MC\PostBundle\Form\PostType;
+use MesClics\PostBundle\Entity\Post;
+use MesClics\PostBundle\Form\PostType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -15,7 +15,7 @@ class PostController extends Controller
     public function initializePostRetriever(Request $request){
         //on récupère les posts
         $post_retriever = $this
-            ->get('mc_post.retriever');
+            ->get('mesclics_post.retriever');
         
         //on ajoute les éventuels paramètres de tri
         //on établit d'abord la liste des éventuels paramètres de tri des résultats qu'on passera au postRetriever :
@@ -78,7 +78,7 @@ class PostController extends Controller
             $args['posts'] = $posts;
         }
 
-        return $this->render('MCAdminBundle:Panel:edition.html.twig', $args);
+        return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
     }
 
     /**
@@ -92,13 +92,13 @@ class PostController extends Controller
 
         //on traite éventuellement le formulaire
         if($request->isMethod('POST')){
-            $post_form_manager = $this->get('mc_post.form_manager.new');
+            $post_form_manager = $this->get('mesclics_post.form_manager.new');
             $post_form_manager->handle($post_form);
             if($post_form_manager->hasSucceeded()){
                 $args = array(
                     'post_id' => $post_form_manager->getResult()->getID()
                 );
-                return $this->redirectToRoute("mc_admin_post", $args);
+                return $this->redirectToRoute("mesclics_admin_post", $args);
             }
         }
 
@@ -109,7 +109,7 @@ class PostController extends Controller
             'new_post_form' => $post_form->createView()
         );
 
-        return $this->render('MCAdminBundle:Panel:edition.html.twig', $args);
+        return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
     }
 
     /**
@@ -137,13 +137,13 @@ class PostController extends Controller
         
         //on traite éventuellement le formulaire si la requête est de type post
         if($request->isMethod('POST')){
-            $form_manager = $this->get('mc_post.form_manager.new');
+            $form_manager = $this->get('mesclics_post.form_manager.new');
             $form_manager->handle($form);
             if($form_manager->hasSucceeded()){
                 $args['post_id'] = $form_manager->getResult()->getID();
-                $this->redirectToRoute("mc_admin_post", $args);
+                $this->redirectToRoute("mesclics_admin_post", $args);
             }
         }
-        return $this->render('MCAdminBundle:Panel:edition.html.twig', $args);
+        return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
     }
 }

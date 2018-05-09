@@ -1,5 +1,5 @@
 <?php
-namespace MC\PostBundle\PostRetriever;
+namespace MesClics\PostBundle\PostRetriever;
 
 use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -18,7 +18,7 @@ class PostRetriever{
     public function __construct(EntityManager $em, TokenStorage $token_storage){
         $this->em = $em;
         $this->token_storage = $token_storage;
-        $this->repository = $this->em->getRepository('MCPostBundle:Post');
+        $this->repository = $this->em->getRepository('MesClicsPostBundle:Post');
         $this->order = 'ASC'; //par défaut le critère de tri @order est ascendant.
         $this->limit = false; //par défaut on retourne un nb infini de résutlats.
         $this->order_by = 'date-creation'; //par défaut on trie les posts par date de création.

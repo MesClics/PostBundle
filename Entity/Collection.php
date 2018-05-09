@@ -1,6 +1,6 @@
 <?php
 
-namespace MC\PostBundle\Entity;
+namespace MesClics\PostBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Collection
  *
  * @ORM\Table(name="mesclics_collection")
- * @ORM\Entity(repositoryClass="MC\PostBundle\Repository\CollectionRepository")
+ * @ORM\Entity(repositoryClass="MesClics\PostBundle\Repository\CollectionRepository")
  */
 class Collection
 {

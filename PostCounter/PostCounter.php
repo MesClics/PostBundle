@@ -1,5 +1,5 @@
 <?php
-namespace MC\PostBundle\PostCounter;
+namespace MesClics\PostBundle\PostCounter;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
@@ -25,7 +25,7 @@ class PostCounter{
     }
 
     public function count($counter_type = false){
-        $post_repo = $this->em->getRepository('MCPostBundle:Post');
+        $post_repo = $this->em->getRepository('MesClicsPostBundle:Post');
         //si on n'indique pas le type de compteur, alors on retourne tous les compteurs
         if(!$counter_type){
             $counters = array();

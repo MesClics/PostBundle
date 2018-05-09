@@ -1,6 +1,6 @@
 <?php
 
-namespace MC\PostBundle\Entity;
+namespace MesClics\PostBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Post
  *
  * @ORM\Table(name="mesclics_post")
- * @ORM\Entity(repositoryClass="MC\PostBundle\Repository\PostRepository")
+ * @ORM\Entity(repositoryClass="MesClics\PostBundle\Repository\PostRepository")
  */
 class Post
 {
@@ -65,13 +65,13 @@ class Post
     private $visibilite;
 
     /**
-     * @ORM\ManyToMany(targetEntity="MC\UserBundle\Entity\User", cascade={ "persist" })
+     * @ORM\ManyToMany(targetEntity="MesClics\UserBundle\Entity\User", cascade={ "persist" })
      * @ORM\JoinTable(name="mesclics_post_user")
      */
     private $authors;
 
     /**
-     * @ORM\ManyToMany(targetEntity = "MC\PostBundle\Entity\Collection", cascade={ "persist" })
+     * @ORM\ManyToMany(targetEntity = "MesClics\PostBundle\Entity\Collection", cascade={ "persist" })
      * @ORM\JoinTable(name="mesclics_post_collection")
      */
     private $collections;
@@ -235,11 +235,11 @@ class Post
     /**
      * Add author.
      *
-     * @param \MC\UserBundle\Entity\User $author
+     * @param \MesClics\UserBundle\Entity\User $author
      *
      * @return Post
      */
-    public function addAuthor(\MC\UserBundle\Entity\User $author)
+    public function addAuthor(\MesClics\UserBundle\Entity\User $author)
     {
         $this->authors[] = $author;
         return $this;
@@ -248,11 +248,11 @@ class Post
     /**
      * Remove author.
      *
-     * @param \MC\UserBundle\Entity\User $author
+     * @param \MesClics\UserBundle\Entity\User $author
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeAuthor(\MC\UserBundle\Entity\User $author)
+    public function removeAuthor(\MesClics\UserBundle\Entity\User $author)
     {
         return $this->authors->removeElement($author);
     }
@@ -270,11 +270,11 @@ class Post
     /**
      * Add collection.
      *
-     * @param \MC\PostBundle\Entity\Collection $collection
+     * @param \MesClics\PostBundle\Entity\Collection $collection
      *
      * @return Post
      */
-    public function addCollection(\MC\PostBundle\Entity\Collection $collection)
+    public function addCollection(\MesClics\PostBundle\Entity\Collection $collection)
     {
         $this->collections[] = $collection;
         return $this;
@@ -283,11 +283,11 @@ class Post
     /**
      * Remove collection.
      *
-     * @param \MC\PostBundle\Entity\Collection $collection
+     * @param \MesClics\PostBundle\Entity\Collection $collection
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeCollection(\MC\PostBundle\Entity\Collection $collection)
+    public function removeCollection(\MesClics\PostBundle\Entity\Collection $collection)
     {
         return $this->collections->removeElement($collection);
     }

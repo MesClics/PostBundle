@@ -1,6 +1,6 @@
 <?php
 
-namespace MC\PostBundle\Controller;
+namespace MesClics\PostBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
