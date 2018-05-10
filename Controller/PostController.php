@@ -75,10 +75,12 @@ class PostController extends Controller
         //on récupère les posts
         $post_retriever = $this->initializePostRetriever($request);
         //on passe les critères de tri à la vue
-        $args['sort'] = $post_retriever->getOrder();
-        $args['filter'] = $post_retriever->getFilter();
-        $args['order_by'] = $post_retriever->getOrderBy();
-
+        $args['sort_params'] = array(
+            'filter' => $post_retriever->getFilter(),
+            'order_by' => $post_retriever->getOrderBy(),
+            'sort' => $post_retriever->getOrder()
+        );
+                        
         $posts = $post_retriever->getPosts();
         if($posts){
             $args['posts'] = $posts;
