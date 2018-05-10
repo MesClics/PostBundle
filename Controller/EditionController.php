@@ -14,7 +14,18 @@ class EditionController extends Controller{
      */
     public function indexAction(){
         $post_retriever = $this->get('mesclics_post.retriever');
-        $posts = $post_retriever->getPosts($this->get('security.token_storage')->getToken()->getUser(), null, 3); 
+        //on ne récupère que les 5 derniers messages
+        $post_retriever
+            ->addOrderParams(array(
+            'date-creation' => 'dateCreation',
+            'date-publication-debut' => 'datePublication',
+            'date-publication-fin' => 'datePeremption',
+            'titre' => 'title'))
+            ->setLimit(5)
+            ->setOrderBy('date-creation')
+            ->setOrder('DESC');
+        
+        $posts = $post_retriever->getPosts(); 
         $args = array(            
             'currentSection' => 'édition',
             'posts' => $posts

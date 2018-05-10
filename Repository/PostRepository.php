@@ -26,8 +26,7 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
 
          if($limit){
              $qb
-            ->limit(':limit')
-            ->setParameter('limit', $limit);
+            ->setMaxResults($limit);
          }
 
         return $qb;
