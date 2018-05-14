@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use MesClics\PostBundle\Entity\Collection;
-use MesClics\PostBundle\Form\CollectionType;
+use MesClics\PostBundle\Form\MesClicsCollectionType;
 
 class CollectionController extends Controller{
     
@@ -38,7 +38,7 @@ class CollectionController extends Controller{
         //on crée un objet collection
         $collection = new Collection();
         //on crée un formulaire
-        $form = $this->createForm(CollectionType::class, $collection);
+        $form = $this->createForm(MesClicsCollectionType::class, $collection);
         if($request->isMethod('POST')){
             //on initialise le form_manager
             $form_manager = $this->get('mesclics_collection.form_manager.new');
