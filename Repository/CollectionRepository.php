@@ -25,7 +25,16 @@ class CollectionRepository extends \Doctrine\ORM\EntityRepository{
 
     }
 
-    public function getFor($entity){
+    public function getForQB($entity){
+        $qb = $this
+        ->createQueryBuilder('collection')
+        ->andWhere('collection.entity = :entity')
+            ->setParameter('entity', $entity);
+        return $qb;
+    }
 
+    public function getFor($entity){
+        $qb = $this->getForQB($entity);
+        return $qb->getQuery()->getResult();
     }
 }

@@ -12,8 +12,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
-// use Symfony\Bridge\Doctrine\Form\Type\CollectionType;
-// use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use MesClics\PostBundle\Form\CollectionType;
+use MesClics\PostBundle\Repository\CollectionRepository;
 
 class PostType extends AbstractType
 {
@@ -47,6 +48,17 @@ class PostType extends AbstractType
                 'privé' => 'private'
             ),
             'empty_data' => 'private'
+        ))
+        ->add('collections', EntityType::class, array(
+            'class' => 'MesClicsPostBundle:Collection',
+            'query_builder' => function(CollectionRepository $repo){
+                return $repo->getForQB('post');
+            },
+            'choice_label' => 'name',
+            'label' => 'Ajouter aux collections',
+            'expanded' => true,
+            'multiple' => true,
+            'required' => false
         ))
         ->add('submit', SubmitType::class, array(
             'label' => 'Ajouter'
