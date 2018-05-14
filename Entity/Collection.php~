@@ -45,50 +45,26 @@ class Collection
     }
 
     /**
-     * Set name.
+     * Set nom.
      *
-     * @param string $name
+     * @param string $nom
      *
      * @return Collection
      */
-    public function setName($name)
+    public function setNom($nom)
     {
-        $this->name = $name;
+        $this->nom = $nom;
 
         return $this;
     }
 
     /**
-     * Get name.
+     * Get nom.
      *
      * @return string
      */
-    public function getName()
+    public function getNom()
     {
-        return $this->name;
-    }
-
-    /**
-     * Set entity.
-     *
-     * @param string $entity
-     *
-     * @return Collection
-     */
-    public function setEntity($entity)
-    {
-        $this->entity = $entity;
-
-        return $this;
-    }
-
-    /**
-     * Get entity.
-     *
-     * @return string
-     */
-    public function getEntity()
-    {
-        return $this->entity;
+        return $this->nom;
     }
 }
