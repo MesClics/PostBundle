@@ -60,7 +60,7 @@ class PostType extends AbstractType
             'multiple' => true,
             'required' => false
         ))
-        ->add('collection', CollectionType::class, array(
+        ->add('collection', MesClicsCollectionType::class, array(
             'label' => 'ajouter une collection',
             'data_class' => null
         ))
