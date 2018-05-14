@@ -1,0 +1,17 @@
+<h2>Liste des collections</h2>
+
+<table class="[ oocss-table ]">
+   <thead>
+        <th>nom</th>
+        <th>type d'objet</th>
+        <th>description</th>
+   </thead>
+
+   {% for collection in collections %}
+        <tr class="[ oocss-table-row ]">
+            <td>{{ collection.name }}</td>
+            <td>{{ collection.entity }}</td>
+            <td>{{ collection.description }}</td>
+        </tr>
+   {% endfor %}
+</table>

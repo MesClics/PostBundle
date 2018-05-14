@@ -96,28 +96,4 @@ class Collection
     {
         return $this->entity;
     }
-
-    /**
-     * Set description.
-     *
-     * @param string|null $description
-     *
-     * @return Collection
-     */
-    public function setDescription($description = null)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description.
-     *
-     * @return string|null
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
 }

@@ -28,10 +28,16 @@ class CollectionType extends AbstractType
                 'Publication' => 'post',
                 'Utilisateur' => 'user',
                 'Message' => 'message',
-                'Client' => 'client'
+                'Client' => 'client',
+                'Collection' => 'collection'
             )
         ))
-        ->add('ajouter', SubmitType::class);
+        ->add('description', TextType::class, array(
+            'label' => 'description de la collection'
+        ))
+        ->add('submit', SubmitType::class, array(
+            'label' => 'ajouter'
+        ));
     }/**
      * {@inheritdoc}
      */
