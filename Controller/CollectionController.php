@@ -13,6 +13,7 @@ class CollectionController extends Controller{
      * @Security("has_role('ROLE_WRITER')")
      */
     public function collectionsAction(){
+        
     }
 
     /**

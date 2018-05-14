@@ -28,3 +28,10 @@ services:
       - "@mesclics_post.counter"
     tags:
       - { name: twig.extension }
+
+  mesclics_collection.form_manager.new:
+    class: MesClics\PostBundle\Form\FormManager\CollectionFormManager
+    arguments:
+        - "@doctrine.orm.entity_manager"
+        - "@request_stack"
+        - "@session"
