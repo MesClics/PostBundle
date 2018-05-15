@@ -76,7 +76,8 @@ class PostType extends AbstractType
             'entry_type' => MesClicsCollectionType::class,
             'allow_add' => true,
             'allow_delete' => false,
-            'required' => false
+            'required' => false,
+            'mapped' => false
         ))
         ->add('submit', SubmitType::class, array(
             'label' => 'Ajouter'
