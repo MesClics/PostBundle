@@ -11,10 +11,14 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use MesClics\PostBundle\Form\MesClicsCollectionType;
 use MesClics\PostBundle\Repository\CollectionRepository;
+use MesClics\PostBundle\Entity\Collection;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class PostType extends AbstractType
 {
@@ -49,24 +53,59 @@ class PostType extends AbstractType
             ),
             'empty_data' => 'private'
         ))
-        ->add('collections', EntityType::class, array(
+        ->add('collections_select', EntityType::class, array(
             'class' => 'MesClicsPostBundle:Collection',
             'query_builder' => function(CollectionRepository $repo){
                 return $repo->getForQB('post');
             },
-            'choice_label' => 'name',
-            'label' => 'Ajouter aux collections',
+            'property_path' => 'collections',
+            'choice_label' => function(Collection $collection){
+                return $collection->getFormLabel();
+            },
+            'choice_attr' => function(Collection $collection, $key, $index){
+                return ['class' => '[ oocss-form-input-button ]',
+                        'title' => $collection->getDescription()];
+            },
             'expanded' => true,
             'multiple' => true,
             'required' => false
         ))
-        ->add('collection', MesClicsCollectionType::class, array(
-            'label' => 'ajouter une collection',
-            'data_class' => null
+        ->add('collections_add', CollectionType::class, array(
+            'label' => 'associer à une collection',
+            'property_path' => 'collections',
+            'entry_type' => MesClicsCollectionType::class,
+            'allow_add' => true,
+            'allow_delete' => false,
+            'required' => false
         ))
         ->add('submit', SubmitType::class, array(
             'label' => 'Ajouter'
         ));
+
+        // $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event){
+        //     //on récupère tous les nouveaux champs collection
+        //     if(isset($event->getData()['collections_select'])){
+        //         $collections = $event->getData()['collections_select'];
+        //         foreach($collections as $collection){
+        //             // var_dump($collection);
+        //         }
+        //     }
+        //     if(isset($event->getData()['collections_add'])){
+        //         $collections_add = $event->getData()['collections_add'];
+        //         foreach($collections_add as $collection){
+        //             // var_dump($collection);
+        //         }
+        //     }
+        // });
+
+        // $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event){
+        //     $data = $event->getData();
+        //     $collections = $data->getCollections();
+        //     foreach($collections as $collection){
+        //         var_dump($collection->getName());
+        //     }
+        //     die();
+        // });
     }
     
     /**

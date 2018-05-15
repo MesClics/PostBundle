@@ -120,4 +120,14 @@ class Collection
     {
         return $this->description;
     }
+
+    public function getFormLabel(){
+        return $this->name . ' (' . $this->description . ')';
+    }
+
+    public function __construct($entity = null){
+        if($entity){
+            $this->entity = $entity;
+        }
+    }
 }

@@ -276,6 +276,7 @@ class Post
      */
     public function addCollection(\MesClics\PostBundle\Entity\Collection $collection)
     {
+        $collection->setEntity('post');
         $this->collections[] = $collection;
         return $this;
     }
@@ -305,6 +306,9 @@ class Post
     public function __construct(){
         $this->authors = new ArrayCollection();
         $this->collections = new ArrayCollection();
+        foreach($this->getCollections() as $collection){
+            $collection->setEntity('post');
+        }
         //on rend automatique la date de création
         $this->setDateCreation(new \DateTime());        
     }
