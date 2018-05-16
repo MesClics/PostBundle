@@ -54,6 +54,7 @@ class PostType extends AbstractType
             'empty_data' => 'private'
         ))
         ->add('collections_select', EntityType::class, array(
+            'label' => 'associer à une collection',
             'class' => 'MesClicsPostBundle:Collection',
             'query_builder' => function(CollectionRepository $repo){
                 return $repo->getCollectionsQB('post');
