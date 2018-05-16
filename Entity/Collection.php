@@ -122,7 +122,7 @@ class Collection
     }
 
     public function getFormLabel(){
-        return $this->name . ' (' . $this->description . ')';
+        return $this->name;
     }
 
     public function __construct($entity = null){
