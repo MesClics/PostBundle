@@ -19,7 +19,7 @@ class CollectionController extends Controller{
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('MesClicsPostBundle:Collection');
 
-        $collections = $repo->getAll();
+        $collections = $repo->getCollections();
 
         //on ajoute un formulaire pour l'ajout de collection
         //on renvoie la vue permettant 'laffichage de la liste des collections

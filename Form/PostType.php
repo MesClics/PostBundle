@@ -56,7 +56,7 @@ class PostType extends AbstractType
         ->add('collections_select', EntityType::class, array(
             'class' => 'MesClicsPostBundle:Collection',
             'query_builder' => function(CollectionRepository $repo){
-                return $repo->getForQB('post');
+                return $repo->getCollectionsQB('post');
             },
             'property_path' => 'collections',
             'choice_label' => function(Collection $collection){

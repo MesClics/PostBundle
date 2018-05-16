@@ -134,8 +134,7 @@ class PostController extends Controller
         $args = array(
             'currentSection' => 'edition',
             'subSection' => 'posts',
-            'postSection' => 'edit',
-            'currentPost' => $post
+            'postSection' => 'edit'
         );
 
         //on crée un formulaire avec le post courant comme ref
@@ -152,6 +151,8 @@ class PostController extends Controller
                 $this->redirectToRoute("mesclics_admin_post", $args);
             }
         }
+
+        $args['currentPost'] = $post;
         return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
     }
 }

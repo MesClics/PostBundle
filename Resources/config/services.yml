@@ -16,22 +16,29 @@ services:
       - "@doctrine.orm.entity_manager"
       - "@security.token_storage"
 
-  mesclics_post.counter:
+  mesclics_post.post.counter:
     class: MesClics\PostBundle\PostCounter\PostCounter
     arguments:
       - "@doctrine.orm.entity_manager"
       - "@security.token_storage"
   
-  mesclics_post.twig.counter:
-    class: MesClics\PostBundle\Twig\PostCounterExtension
-    arguments:
-      - "@mesclics_post.counter"
-    tags:
-      - { name: twig.extension }
-
   mesclics_collection.form_manager.new:
     class: MesClics\PostBundle\Form\FormManager\CollectionFormManager
     arguments:
         - "@doctrine.orm.entity_manager"
         - "@request_stack"
         - "@session"
+
+  mesclics_post.collection.counter:
+    class: MesClics\PostBundle\CollectionCounter\CollectionCounter
+    arguments:
+      - "@doctrine.orm.entity_manager"
+      - "@security.token_storage"
+
+  mesclics_post.twig.counter:
+    class: MesClics\PostBundle\Twig\PostCounterExtension
+    arguments:
+      - "@mesclics_post.post.counter"
+      - "@mesclics_post.collection.counter"
+    tags:
+      - { name: twig.extension }

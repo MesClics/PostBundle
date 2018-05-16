@@ -9,32 +9,30 @@ namespace MesClics\PostBundle\Repository;
  * repository methods below.
  */
 class CollectionRepository extends \Doctrine\ORM\EntityRepository{
-    public function getAll(){
+    public function getCollectionsQB($of = null){
+        // TODO: ajouter le critère User (ne sélectionner que les collections que peut voir l'utilisateur)
         $qb = $this
         ->createQueryBuilder('collection')
         ->orderBy('collection.entity');
 
-        return $qb->getQuery()->getResult();
-    }
+        if($of){
+            $qb
+            ->andWhere('collection.entity = :entity')
+                ->setParameter('entity', $of);
+        }
 
-    public function getPublic(){
-
-    }
-
-    public function getPrivate(){
-
-    }
-
-    public function getForQB($entity){
-        $qb = $this
-        ->createQueryBuilder('collection')
-        ->andWhere('collection.entity = :entity')
-            ->setParameter('entity', $entity);
         return $qb;
     }
 
-    public function getFor($entity){
-        $qb = $this->getForQB($entity);
+    public function getCollections($of = null){
+        $qb = $this->getCollections($of);
         return $qb->getQuery()->getResult();
+    }
+
+    public function countCollections($of = null){
+        $qb = $this->getCollectionsQB($of);
+        $qb
+        ->select('COUNT(collection)');
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }

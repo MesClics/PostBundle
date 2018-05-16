@@ -21,10 +21,9 @@
             <h3>Collections</h3>
         </div>
         <ul class="[ oocss-sub_section-nav-bloc--content ]">
-            {% if collections is defined %}
+            {% if collections is defined or countCollections() > 0 %}
                 <li>
-                    <a class="[ oocss-button oocss-discret oocss-headed-block oocss-horizontal oocss-s ] collections-all" href="{{ path('mesclics_admin_collections') }}">Toutes les collections</a>
-                    {# <span class="[ oocss-index oocss-index__d__lateral ]">{{ countCollections('all') }}</span> #}
+                    <a class="[ oocss-button oocss-discret oocss-headed-block oocss-horizontal oocss-s ] collections-all" href="{{ path('mesclics_admin_collections') }}">Toutes les collections<span class="[ oocss-index oocss-index__d__lateral ]">{{ countCollections() }}</span></a>
                 </li>
             {% endif %}
             <li>
