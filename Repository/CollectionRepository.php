@@ -25,7 +25,7 @@ class CollectionRepository extends \Doctrine\ORM\EntityRepository{
     }
 
     public function getCollections($of = null){
-        $qb = $this->getCollections($of);
+        $qb = $this->getCollectionsQB($of);
         return $qb->getQuery()->getResult();
     }
 
