@@ -31,6 +31,7 @@
             </div>
         </div>
     </div>
+
     <div class="[ oocss-form-row ]">
         <div class="[ oocss-form-label ]">{{ form_label(post_form.visibilite) }}</div>
         <div class="[ oocss-form-error ]">{{ form_errors(post_form.visibilite) }}</div>
@@ -38,17 +39,17 @@
     </div>
 
     <div class="[ oocss-form-row ]">
-        <div class="[ oocs-form-label ]">{{ form_label(post_form.collections_select) }}</div>
+        <div class="[ oocs-form-label oocss-block oocss-horizontal oocss-center-v ]">{{ form_label(post_form.collections_select) }}<button class="[ oocss-button oocss-button-rounded oocss-js-dynamic-button ]" title="créer une nouvelle collection">+</button></div>
+        <div class="[ oocss-form-error ]">{{ form_errors(post_form.collections_select) }}</div>
         <div class="[ oocss-form-fieldset ]">
-            <div class="[ oocss-form-error ]">{{ form_errors(post_form.collections_select) }}</div>
             <div class="[ oocss-horizontal oocss-js-dynamic-target ]">{{ form_widget(post_form.collections_select) }}</div>
+            
         </div>
         
         <div class="[ oocss-form-error ]">{{ form_errors(post_form.collections_add) }}</div>
         <div>
             <div data-class="[ oocss-form-fieldset ]" class="[ oocss-js-dynamic-template oocss-horizontal ]" data-prototype="<h4>créer une nouvelle collection</h4><div><p class='[ oocss-block oocss-horizontal oocss-center-all ]'><span>insérer un nom pour la nouvelle collection :</span>{{ form_widget(post_form.collections_add.vars.prototype.name, {'attr':{'class':'[ oocss-form-input ] collection', 'placeholder': 'nom'}})|e('html_attr') }}</p><p class='[ oocss-block oocss-horizontal oocss-center-all ]'> <span>insérer une description pour la nouvelle collection :</span>{{ form_widget(post_form.collections_add.vars.prototype.description, {'attr':{'class':'[ oocss-form-input ] collection', 'placeholder': 'description'}})|e('html_attr') }}</p></div>">
             </div>
-            <button class="[ oocss-button oocss-button-rounded oocss-js-dynamic-button ]" title="créer une nouvelle collection">+</button>
         </div>
     </div>
 
