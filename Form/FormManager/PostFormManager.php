@@ -20,8 +20,6 @@ class PostFormManager extends FormManager{
             $this->setAction($this->getForm()->getClickedButton()->getName());
             //on récupère notre objet Post
             $object = $this->getForm()->getData();
-            //on persiste notre objet
-            $this->getEm()->persist($object);
             //on récupère les éventuelles nouvelles collections:
             $collections = $this->getForm()->get('collections_add')->getData();
             if($collections){
@@ -39,6 +37,8 @@ class PostFormManager extends FormManager{
                 }
             }
             //on envoie les modifs à la bdd
+            //on persiste notre objet
+            $this->getEm()->persist($object);
             $this->getEm()->flush();
             $this->setResult($object);
             $result_count = $this->getResultCount();

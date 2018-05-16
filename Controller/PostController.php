@@ -125,22 +125,13 @@ class PostController extends Controller
      * @Security("has_role('ROLE_WRITER')")
      */
     public function editAction(Post $post, Request $request){
-        //on vérifie que l'utilisateur courant fasse bien aprtie des auteurs de la publication
+        //on vérifie que l'utilisateur courant fasse bien partie des auteurs de la publication
         $user = $this->get('security.token_storage')->getToken()->getUser();
         if(!$post->getAuthors()->contains($user)){
             throw new AccessDeniedException('Seuls les auteurs de la publication peuvent la modifier');
         }
-
-        $args = array(
-            'currentSection' => 'edition',
-            'subSection' => 'posts',
-            'postSection' => 'edit'
-        );
-
         //on crée un formulaire avec le post courant comme ref
         $form = $this->createForm(PostType::class, $post);
-
-        $args['edit_post_form'] = $form->createView();
         
         //on traite éventuellement le formulaire si la requête est de type post
         if($request->isMethod('POST')){
@@ -148,11 +139,18 @@ class PostController extends Controller
             $form_manager->handle($form);
             if($form_manager->hasSucceeded()){
                 $args['post_id'] = $form_manager->getResult()->getID();
-                $this->redirectToRoute("mesclics_admin_post", $args);
+                return $this->redirectToRoute("mesclics_admin_post", $args);
             }
         }
 
-        $args['currentPost'] = $post;
+        $args = array(
+            'currentSection' => 'edition',
+            'subSection' => 'posts',
+            'postSection' => 'edit',
+            'edit_post_form' => $form->createView(),
+            'currentPost' => $post
+        );
+
         return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
     }
 }
