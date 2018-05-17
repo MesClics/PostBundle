@@ -23,8 +23,16 @@
     },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/MesClics/AdminBundle.git"
+            "type": "package",
+            "package": {
+                "name": "mesclics/admin-bundle",
+                "version": "master",
+                "source": {
+                    "url": "https://github.com/MesClics/AdminBundle.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
         }
     ],
     "require-dev": {
