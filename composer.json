@@ -1,23 +1,19 @@
 {
     "name": "mesclics/post-bundle",
-    "description": "Ajout de la fonctionnalité publications / collections dans une console d'administration MesClics",
+    "description": "Bundle pour l'ajout d'un espace de publication à la console d'administration mesclics",
     "license": "proprietary",
     "type": "project",
-    "require": {
-        "mesclics/admin-bundle": "*"
-    },
-    "repositories": [
+    "version": "0.0.1",
+    "homepage": "https://github.com/MesClics/PostBundle.git",
+    "authors": [
         {
-            "type": "package",
-            "package": {
-                "name": "mesclics/admin-bundle",
-                "version": "master",
-                "source": {
-                    "url": "https://github.com/MesClics/AdminBundle.git",
-                    "type": "github",
-                    "reference": "master"
-                }
-            }
+            "name": "mesclics.fr",
+            "email": "contact@mesclics.fr",
+            "homepage": "http://www.mesclics.fr",
+            "role": "Developer"
         }
-    ]
+    ],
+    "require": {
+        "mesclics/admin-bundle": "0.*"
+    }
 }
