@@ -1,5 +1,5 @@
 {
-    "name": "MesClics/PostBundle",
+    "name": "mesclics/post-bundle",
     "description": "Ajout de la fonctionnalité publications / collections dans une console d'administration MesClics",
     "license": "proprietary",
     "type": "project",
@@ -19,7 +19,7 @@
         ]
     },
     "require": {
-        "MesClics/AdminBundle": "*"
+        "mesclics/admin-bundle": "*"
     },
     "repositories": [
         {
