@@ -16,35 +16,24 @@ class MesClicsCollectionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $available_collections = $options['available_collections'];
         $builder
-        ->add('name', TextType::class, array(
-            'label' => 'nom de la collection'
-        ))
+        ->add('name', TextType::class)
         ->add('entity', ChoiceType::class, array(
-            'label' => 'type d\'objet',
             'expanded' => false,
             'multiple' => false,
-            'choices' => array(
-                'Publication' => 'post',
-                'Utilisateur' => 'user',
-                'Message' => 'message',
-                'Client' => 'client',
-                'Collection' => 'collection'
-            )
+            'choices' => $available_collections
         ))
-        ->add('description', TextType::class, array(
-            'label' => 'description de la collection'
-        ))
-        ->add('submit', SubmitType::class, array(
-            'label' => 'ajouter'
-        ));
+        ->add('description', TextType::class)
+        ->add('submit', SubmitType::class);
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MesClics\PostBundle\Entity\Collection'
+            'data_class' => 'MesClics\PostBundle\Entity\Collection',
+            'available_collections' => null
         ));
     }
 

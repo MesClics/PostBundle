@@ -1,25 +1,32 @@
 {{ form_start(collection_form, {'attr': { 'class': '[ oocss-form ] collection'}})}}
     <div class="[ oocss-form-row ]">
-        <div class="[ oocss-form-label ]">{{ form_label(collection_form.name) }}</div>
+        <div class="[ oocss-form-label ]">Nom de la collection</div>
         <div class="[ oocss-form-error ]">{{ form_errors(collection_form.name) }}</div>
-        <div class="[ oocss-form-widget ]">{{ form_widget(collection_form.name, {'attr': {'class': '[ oocss-form-input oocss-form-text ] nom de la collection'
+        <div class="[ oocss-form-widget ]">{{ form_widget(collection_form.name, {'attr': {'class': '[ oocss-form-input oocss-form-text ]'
             }}) }}</div>
     </div>
 
     <div class="[ oocss-form-row ]">
-        <div class="[ oocss-form-label ]">{{ form_label(collection_form.description) }}</div>
+        <div class="[ oocss-form-label ]">Description</div>
         <div class="[ oocss-form-error ]">{{ form_errors(collection_form.description) }}</div>
-        <div class="[ oocss-form-widget oocss-full-container-width ]">{{ form_widget(collection_form.description, {'attr': {'class': '[ oocss-form-input oocss-form-text ] description'}}) }}</div>
+        <div class="[ oocss-form-widget oocss-full-container-width ]">{{ form_widget(collection_form.description, {'attr': {'class': '[ oocss-form-input oocss-form-text ]'}}) }}</div>
     </div>
 
     <div class="[ oocss-form-row ]">
-        <div class="[ oocss-form-label ]">{{ form_label(collection_form.entity) }}</div>
+        <div class="[ oocss-form-label ]">Type d'objets constituant la collection</div>
         <div class="[ oocss-form-error ]">{{ form_errors(collection_form.entity) }}</div>
-        <div class="[ oocss-form-widget ]">{{ form_widget(collection_form.entity, {'attr': {'class': '[ oocss-form-input oocss-form-select ] type d\'objet'}}) }}</div>
+        <div class="[ oocss-form-widget ]">{{ form_widget(collection_form.entity, {'attr': {'class': '[ oocss-form-input oocss-form-select ]'}}) }}</div>
     </div>
 
     <div class="oocss-form-row">
-        <div class="[ oocss-form-widget ] collection">{{ form_widget(collection_form.submit, {'attr': {'class': '[ oocss-form-input oocss-form-submit oocss-button ]'}}) }}</div>
+        <div class="[ oocss-form-widget ] collection">{{ form_widget(collection_form.submit, {
+            'attr': {
+                'class': '[ oocss-form-input oocss-form-submit oocss-button ]'
+            },
+            'label': 'enregistrer'
+            })
+        }}
+        </div>
     </div>
 
     {{ form_widget(collection_form._token) }}
