@@ -38,7 +38,9 @@ class CollectionController extends Controller{
         //on crée un objet collection
         $collection = new Collection();
         //on crée un formulaire
-        $form = $this->createForm(MesClicsCollectionType::class, $collection);
+        $options['available_collections'] = $this->container->getParameter('admin.collections');
+
+        $form = $this->createForm(MesClicsCollectionType::class, $collection, $options);
         if($request->isMethod('POST')){
             //on initialise le form_manager
             $form_manager = $this->get('mesclics_collection.form_manager.new');
