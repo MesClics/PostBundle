@@ -3,42 +3,42 @@ services:
 #        class: MesClics\PostBundle\Example
 #        arguments: ["@service_id", "plain_value", "%parameter%"]
 
-  mesclics_post.form_manager.new:
-    class: MesClics\PostBundle\Form\FormManager\PostFormManager
-    arguments:
-      - "@doctrine.orm.entity_manager"
-      - "@request_stack"
-      - "@session"
+  # mesclics_post.form_manager.new:
+  #   class: MesClics\PostBundle\Form\FormManager\PostFormManager
+  #   arguments:
+  #     - "@doctrine.orm.entity_manager"
+  #     - "@request_stack"
+  #     - "@session"
 
-  mesclics_post.retriever:
-    class: MesClics\PostBundle\PostRetriever\PostRetriever
-    arguments:
-      - "@doctrine.orm.entity_manager"
-      - "@security.token_storage"
+  # mesclics_post.retriever:
+  #   class: MesClics\PostBundle\PostRetriever\PostRetriever
+  #   arguments:
+  #     - "@doctrine.orm.entity_manager"
+  #     - "@security.token_storage"
 
-  mesclics_post.post.counter:
-    class: MesClics\PostBundle\PostCounter\PostCounter
-    arguments:
-      - "@doctrine.orm.entity_manager"
-      - "@security.token_storage"
+  # mesclics_post.post.counter:
+  #   class: MesClics\PostBundle\PostCounter\PostCounter
+  #   arguments:
+  #     - "@doctrine.orm.entity_manager"
+  #     - "@security.token_storage"
   
-  mesclics_collection.form_manager.new:
-    class: MesClics\PostBundle\Form\FormManager\CollectionFormManager
-    arguments:
-        - "@doctrine.orm.entity_manager"
-        - "@request_stack"
-        - "@session"
+  # mesclics_collection.form_manager.new:
+  #   class: MesClics\PostBundle\Form\FormManager\CollectionFormManager
+  #   arguments:
+  #       - "@doctrine.orm.entity_manager"
+  #       - "@request_stack"
+  #       - "@session"
 
-  mesclics_post.collection.counter:
-    class: MesClics\PostBundle\CollectionCounter\CollectionCounter
-    arguments:
-      - "@doctrine.orm.entity_manager"
-      - "@security.token_storage"
+  # mesclics_post.collection.counter:
+  #   class: MesClics\PostBundle\CollectionCounter\CollectionCounter
+  #   arguments:
+  #     - "@doctrine.orm.entity_manager"
+  #     - "@security.token_storage"
 
-  mesclics_post.twig.counter:
-    class: MesClics\PostBundle\Twig\PostCounterExtension
-    arguments:
-      - "@mesclics_post.post.counter"
-      - "@mesclics_post.collection.counter"
-    tags:
-      - { name: twig.extension }
+  # mesclics_post.twig.counter:
+  #   class: MesClics\PostBundle\Twig\PostCounterExtension
+  #   arguments:
+  #     - "@mesclics_post.post.counter"
+  #     - "@mesclics_post.collection.counter"
+  #   tags:
+  #     - { name: twig.extension }

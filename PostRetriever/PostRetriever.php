@@ -1,9 +1,9 @@
 <?php
 namespace MesClics\PostBundle\PostRetriever;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Doctrine\ORM\EntityManager;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class PostRetriever{
     private $em;
@@ -15,11 +15,11 @@ class PostRetriever{
     private $filter;
     private $limit;
 
-    public function __construct(EntityManager $em, TokenStorage $token_storage){
+    public function __construct(EntityManagerInterface $em, TokenStorageInterface $token_storage, $adminListItemsNumber){
         $this->em = $em;
         $this->token_storage = $token_storage;
         $this->repository = $this->em->getRepository('MesClicsPostBundle:Post');
-        $this->limit = false; //par défaut on retourne un nb infini de résutlats.
+        $this->limit = $adminListItemsNumber; //get the %admin.list_items_number% parameter (bound in the service config file).
         $this->order_by = 'date-creation'; //par défaut on trie les posts par date de création.
         if(preg_match('/^date-/m', $this->order_by)){//par défaut le critère de tri @order est ascendant sauf lorsque le critère de tri commence par date_
             $this->order = 'DESC';
@@ -72,6 +72,10 @@ class PostRetriever{
     public function setLimit(int $limit){
         $this->limit = $limit;
         return $this;
+    }
+
+    public function getLimit(){
+        return $this->limit;
     }
 
     public function getPosts(){
