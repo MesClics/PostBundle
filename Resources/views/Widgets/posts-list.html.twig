@@ -1,0 +1,136 @@
+{% if sort_params.sort is not defined or sort_params.sort is same as ('ASC') %}
+    {% set sort_param_inv = 'DESC' %}
+{% else %}
+    {% set sort_param_inv = 'ASC' %}
+{% endif %}
+
+{% if posts is defined and posts|length > 0 %}
+<section class="oocss-widget large posts-list">
+    <div class="oocss-widget--head">
+        <h2 class="oocss-widget--title">Liste des publications</h2>
+    </div>
+
+    <div class="oocss-widget--content">
+        <ul class="oocss-block oocss-horizontal oocss-center-h oocss-legend oocss-legend__d__list oocss-legend__s__horizontal filters posts-filters" data-filters="class:all/name:désactiver tous les filtres/getter:getAllPosts|class:online/name:en ligne/getter:getOnlinePosts|class:onlineWithPeremption/name:en ligne avec date de péremption/getter:getOnlineWithPeremptionPosts|class:toBePublished/name:publié prochainement/getter:getToBePublishedPosts|class:unpublished/name:dépublié/getter:getUnpublishedPosts|class:draft/name:brouillon/getter:getDraftPosts|class:public/name:public/getter:getPublicPosts|class:private/name:privé/getter:getPrivatePosts">
+        </ul>
+        <table class="oocss-table posts-filters-target">
+            <tr class="oocsss-table-head-row">
+                <th></th>
+                {# DATE DE CREATION #}
+                <th>
+                    {% if sort_params.order_by is not defined or sort_params.order_by is same as ('date-creation') %}
+                    {% set sort_param = sort_param_inv %}
+                    {% else %}
+                    {% set sort_param = 'ASC' %}
+                    {% endif %}
+                    <a href="{{ path('mesclics_admin_posts', {'filter': sort_params.filter|default(null), 'order-by': 'date-creation', 'sort': sort_param }) }}"
+                        class="[ oocss-table-col-sort {% if sort_params.order_by is not defined or sort_params.order_by is same as ('date-creation') %}oocss-active {% endif %}] sort-{{ sort_params.sort|default('asc') }}">créée
+                        le</a>
+                </th>
+                {# TITRE DU POST #}
+                <th>
+                    {% if sort_params.order_by is defined and sort_params.order_by is same as ('titre') %}
+                    {% set sort_param = sort_param_inv %}
+                    {% else %}
+                    {% set sort_param = 'ASC' %}
+                    {% endif %}
+                    <a href="{{ path('mesclics_admin_posts', {'filter': sort_params.filter|default(null), 'order-by': 'titre', 'sort': sort_param }) }}"
+                        class="[ oocss-table-col-sort ] sort-{{ sort_params.sort|default('asc') }} {% if sort_params.order_by is defined and sort_params.order_by is same as ('titre') %}oocss-active {% endif %}">titre</a>
+                </th>
+                {# DATE DE PUBLICATION #}
+                <th>
+                    {% if sort_params.order_by is defined and sort_params.order_by is same as ('date-publication-debut') %}
+                    {% set sort_param = sort_param_inv %}
+                    {% else %}
+                    {% set sort_param = 'DESC' %}
+                    {% endif %}
+                    <a href="{{ path('mesclics_admin_posts', {'filter': sort_params.filter|default(null), 'order-by': 'date-publication-debut', 'sort': sort_param }) }}"
+                        class="[ oocss-table-col-sort ] sort-{{ sort_params.sort|default('desc') }} {% if sort_params.order_by is defined and sort_params.order_by is same as ('date-publication-debut') %}oocss-active {% endif %}">publiée
+                        le</a>
+                </th>
+                {# DATE DE PEREMPTION #}
+                <th>
+                    {% if sort_params.order_by is defined and sort_params.order_by is same as ('date-publication-fin') %}
+                    {% set sort_param = sort_param_inv %}
+                    {% else %}
+                    {% set sort_param = 'DESC' %}
+                    {% endif %}
+                    <a href="{{ path('mesclics_admin_posts', {'filter': sort_params.filter|default(null), 'order-by': 'date-publication-fin', 'sort': sort_param }) }}"
+                        class="[ oocss-table-col-sort  {% if sort_params.order_by is defined and sort_params.order_by is same as ('date-publication-fin') %}oocss-active {% endif %}] sort-{{ sort_params.sort|default('asc') }}">dépubliée
+                        le</a>
+                </th>
+            </tr>
+        
+            {% for post in posts %}
+            <tr class="oocss-table-row filter-target-item" data-filters-item="posts-list">
+                <td class="[ oocss-table-data__d__discret oocss-table-data__s__horizontal ]">
+                    {% if post.isOnline %}
+                    {% if post.willBeUnpublished %}
+                    <span class="[ oocss-index ] onlineWithPeremption_posts"></span>
+                    {% else %}
+                    <span class="[ oocss-index ] online_posts"></span>
+                    {% endif %}
+                    {% endif %}
+                    {% if post.willBePublished %}<span class="[ oocss-index ] toBePublished_posts"></span>{% endif %}
+                    {% if post.hasBeenPublished and not post.isOnline %}<span
+                        class="[ oocss-index ] unpublished_posts"></span>{% endif %}
+                    {% if post.isDraft %}<span class="[ oocss-index ] draft_posts"></span>{% endif %}
+        
+                    {% if post.visibilite is same as ('public') %}<span
+                        class="[ oocss-index oocss-icone ] public_posts"></span>{% endif %}
+                    {% if post.visibilite is same as ('private') %}
+                    <span class="[ oocss-index oocss-icone ] private_posts"></span>{% endif %}
+                </td>
+                <td>
+                    {{ post.dateCreation | date('d/m/y') }} à {{ post.dateCreation | date('H:i') }}
+                </td>
+                <td>
+                    <a class="[ oocss-table-link ]"
+                        href="{{ path('mesclics_admin_post', { 'post_id': post.id }) }}">{{ post.title }}</a>
+                </td>
+                <td>
+                    {% if post.datePublication is not null %}
+                    {{ post.datePublication | date('d/m/y') }} à {{ post.datePublication | date('H:i') }}
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if post.datePeremption is not null %}
+                    {{ post.datePeremption | date('d/m/y') }} à {{ post.datePeremption | date('H:i') }}
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+
+
+    </div>
+</section>
+{% else %}
+    {% if sort_params.filter is defined %}
+        {% if sort_params.filter is same as ('online') %}
+            {% set alert_message = 'Aucune de vos publications n\'est en ligne actuellement.' %}
+
+        {% elseif sort_params.filter is same as ('online-with-peremption') %} {% set alert_message = 'Aucune de vos publications actuellement en ligne n\'a de date de fin de publication prévue.' %}
+
+        {% elseif sort_params.filter is same as ('to-be-published') %} {% set alert_message = 'Aucune de vos publications n\'est actuellement programmée pour une mise en ligne prochaine.' %}
+
+        {% elseif sort_params.filter is same as ('unpublished') %} {% set alert_message = 'Aucune de vos publications n\'a encore passé sa date de fin de publication.' %}
+
+        {% elseif sort_params.filter is same as ('online') %} {% set alert_message = 'Aucune de vos publications n\'est actuellement enregistrée en tant que brouillon.' %}
+        {% endif %}
+    {% else %}
+        {% set alert_message = 'Vous n\'avez encore aucune publication à votre nom.' %}
+    {% endif %}
+
+    {% if alert_message is defined %}
+        <p class="[ oocss-block oocss-vertical oocss-center-all ]">
+            {{ alert_message }}
+            <a class="[ oocss-button oocss-headed-block oocss-horizontal oocss-s ] publication-new" href="{{ path('mesclics_admin_posts_new') }}">Ajouter une nouvelle publication</a>
+        </p>
+    {% endif %}
+{% endif %}
