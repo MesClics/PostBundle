@@ -1,16 +1,17 @@
 <?php
 namespace MesClics\PostBundle\CollectionCounter;
 
-use Doctrine\ORM\EntityManager;
+
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class CollectionCounter{
     private $em;
     private $token_storage;
     private $counter_types;
 
-    public function __construct(EntityManager $em, TokenStorage $token_storage){
+    public function __construct(EntityManagerInterface $em, TokenStorageInterface $token_storage){
         $this->em = $em;
         $this->token_storage = $token_storage;
         $this->counter_types = array(

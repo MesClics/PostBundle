@@ -2,22 +2,30 @@
 
 namespace MesClics\PostBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use MesClics\PostBundle\Entity\Post;
 use MesClics\PostBundle\Form\PostType;
+use Symfony\Component\HttpFoundation\Request;
+use MesClics\PostBundle\PostRetriever\PostRetriever;
+use MesClics\PostBundle\Form\FormManager\PostFormManager;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class PostController extends Controller
 {
+    private $post_retriever;
+    private $form_manager;
+    private $token_storage;
+
+    public function __construct(PostRetriever $post_retriever, PostFormManager $form_manager, TokenStorageInterface $token_storage){
+        $this->post_retriever = $post_retriever;
+        $this->form_manager = $form_manager;
+        $this->token_storage = $token_storage;
+    }
     
-    public function initializePostRetriever(Request $request){
-        //on récupère les posts
-        $post_retriever = $this
-            ->get('mesclics_post.retriever');
-        
+    public function initializePostRetriever(Request $request){        
         //on ajoute les éventuels paramètres de tri
         //on établit d'abord la liste des éventuels paramètres de tri des résultats qu'on passera au postRetriever :
         $order_params = array(
@@ -26,7 +34,7 @@ class PostController extends Controller
             'date-publication-fin' => 'datePeremption',
             'titre' => 'title'
         );
-        $post_retriever->addOrderParams($order_params);
+        $this->post_retriever->addOrderParams($order_params);
         
         //ORDER-BY
         if($request->query->get('order-by')){
@@ -35,7 +43,7 @@ class PostController extends Controller
             //par défaut on trie par date de création
             $order_by = 'date-creation';
         }
-        $post_retriever->setOrderBy($order_by);
+        $this->post_retriever->setOrderBy($order_by);
 
         //SORT
         if($request->query->get('sort')){
@@ -44,13 +52,13 @@ class PostController extends Controller
             // var_dump($sort);
         } else{
             //par défaut on trie apr ordre croissant saud si le critère de tri commence par date-
-            if(!preg_match('/^date-/m', $post_retriever->getOrderBy())){
+            if(!preg_match('/^date-/m', $this->post_retriever->getOrderBy())){
                 $sort = 'ASC';
             } else{
                 $sort = 'DESC';
             }
         }
-        $post_retriever->setOrder($sort);
+        $this->post_retriever->setOrder($sort);
 
         //FILTER
         if($request->query->get('filter')){
@@ -58,9 +66,9 @@ class PostController extends Controller
         } else{
             $filter = null;
         }
-        $post_retriever->setFilter($filter);
+        $this->post_retriever->setFilter($filter);
 
-        return $post_retriever;
+        return $this->post_retriever;
     }
 
     /**
@@ -73,15 +81,15 @@ class PostController extends Controller
         );
 
         //on récupère les posts
-        $post_retriever = $this->initializePostRetriever($request);
+        $this->post_retriever = $this->initializePostRetriever($request);
         //on passe les critères de tri à la vue
         $args['sort_params'] = array(
-            'filter' => $post_retriever->getFilter(),
-            'order_by' => $post_retriever->getOrderBy(),
-            'sort' => $post_retriever->getOrder()
+            'filter' => $this->post_retriever->getFilter(),
+            'order_by' => $this->post_retriever->getOrderBy(),
+            'sort' => $this->post_retriever->getOrder()
         );
                         
-        $posts = $post_retriever->getPosts();
+        $posts = $this->post_retriever->getPosts();
         if($posts){
             $args['posts'] = $posts;
         }
@@ -95,16 +103,15 @@ class PostController extends Controller
     public function newAction(Request $request){
         //on génère un formulaire pour la création d'uun nouveau post.
         $post = new Post();
-        $post->addAuthor($this->get('security.token_storage')->getToken()->getUser());
+        $post->addAuthor($this->token_storage->getToken()->getUser());
         $post_form = $this->createForm(PostType::class, $post);
 
         //on traite éventuellement le formulaire
         if($request->isMethod('POST')){
-            $post_form_manager = $this->get('mesclics_post.form_manager.new');
-            $post_form_manager->handle($post_form);
-            if($post_form_manager->hasSucceeded()){
+            $this->form_manager->handle($post_form);
+            if($this->form_manager->hasSucceeded()){
                 $args = array(
-                    'post_id' => $post_form_manager->getResult()->getID()
+                    'post_id' => $this->form_manager->getResult()->getID()
                 );
                 return $this->redirectToRoute("mesclics_admin_post", $args);
             }
@@ -126,7 +133,7 @@ class PostController extends Controller
      */
     public function editAction(Post $post, Request $request){
         //on vérifie que l'utilisateur courant fasse bien partie des auteurs de la publication
-        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $user = $this->token_storage->getToken()->getUser();
         if(!$post->getAuthors()->contains($user)){
             throw new AccessDeniedException('Seuls les auteurs de la publication peuvent la modifier');
         }
@@ -135,9 +142,8 @@ class PostController extends Controller
         
         //on traite éventuellement le formulaire si la requête est de type post
         if($request->isMethod('POST')){
-            $form_manager = $this->get('mesclics_post.form_manager.new');
-            $form_manager->handle($form);
-            if($form_manager->hasSucceeded()){
+            $this->form_manager->handle($form);
+            if($this->form_manager->hasSucceeded()){
                 $args['post_id'] = $form_manager->getResult()->getID();
                 return $this->redirectToRoute("mesclics_admin_post", $args);
             }

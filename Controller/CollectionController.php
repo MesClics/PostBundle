@@ -9,11 +9,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use MesClics\PostBundle\Entity\Collection;
 use MesClics\PostBundle\Form\MesClicsCollectionType;
 
+/**
+ * @Security("has_role('ROLE_EDITOR')")
+ */
 class CollectionController extends Controller{
     
-    /**
-     * @Security("has_role('ROLE_WRITER')")
-     */
     public function collectionsAction(){
         //on récupère la liste des collections déjà existantes
         $em = $this->getDoctrine()->getManager();
@@ -31,9 +31,6 @@ class CollectionController extends Controller{
         return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
     }
 
-    /**
-     * @Security("has_role('ROLE_EDITOR')")
-     */
     public function newAction(Request $request){
         //on crée un objet collection
         $collection = new Collection();
