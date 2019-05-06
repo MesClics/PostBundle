@@ -65,7 +65,7 @@ class Post
     private $visibilite;
 
     /**
-     * @ORM\ManyToMany(targetEntity="MesClics\UserBundle\Entity\User", cascade={ "persist" })
+     * @ORM\ManyToMany(targetEntity="MesClicsBundle\Entity\MesClicsUser", cascade={ "persist" })
      * @ORM\JoinTable(name="mesclics_post_user")
      */
     private $authors;
@@ -235,11 +235,11 @@ class Post
     /**
      * Add author.
      *
-     * @param \MesClics\UserBundle\Entity\User $author
+     * @param \MesClicsBundle\Entity\MesClicsUser $author
      *
      * @return Post
      */
-    public function addAuthor(\MesClics\UserBundle\Entity\User $author)
+    public function addAuthor(\MesClicsBundle\Entity\MesClicsUser $author)
     {
         $this->authors[] = $author;
         return $this;
@@ -248,11 +248,11 @@ class Post
     /**
      * Remove author.
      *
-     * @param \MesClics\UserBundle\Entity\User $author
+     * @param \MesClicsBundle\Entity\MesClicsUser $author
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeAuthor(\MesClics\UserBundle\Entity\User $author)
+    public function removeAuthor(\MesClicsBundle\Entity\MesClicsUser $author)
     {
         return $this->authors->removeElement($author);
     }
@@ -352,5 +352,41 @@ class Post
     public function isDraft(){
         $now = new \DateTime();
         return (!$this->datePublication ? true : false);
+    }
+
+    public function getFilters(){
+        $filters = array();
+
+        if($this->getVisibilite() == "public"){
+            $filters[] = "publicPost";
+        }
+
+        if($this->getVisibilite() == 'private'){
+            $filters[] = "privatePost";
+        }
+
+        if($this->isOnline()){
+
+            if($this->willBeUnpublished()){
+                $filters[] = "onlineWithPeremptionPost";
+            } else{
+                $filters[] = "onlinePost";
+            }
+        }
+
+        if($this->willBePublished()){
+            $filters[] = "toBePublishedPost";
+        }
+
+
+        if($this->hasBeenPublished() && !$this->isOnline()){
+            $filters[] = "unpublishedPost";
+        }
+
+        if($this->isDraft()){
+            $filters[] = "draftPost";
+        }
+
+        return $filters;
     }
 }

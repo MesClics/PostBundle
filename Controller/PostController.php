@@ -49,7 +49,6 @@ class PostController extends Controller
         if($request->query->get('sort')){
             
             $sort = $request->query->get('sort');
-            // var_dump($sort);
         } else{
             //par défaut on trie apr ordre croissant saud si le critère de tri commence par date-
             if(!preg_match('/^date-/m', $this->post_retriever->getOrderBy())){
@@ -59,14 +58,6 @@ class PostController extends Controller
             }
         }
         $this->post_retriever->setOrder($sort);
-
-        //FILTER
-        if($request->query->get('filter')){
-            $filter = $request->query->get('filter');
-        } else{
-            $filter = null;
-        }
-        $this->post_retriever->setFilter($filter);
 
         return $this->post_retriever;
     }
@@ -84,7 +75,6 @@ class PostController extends Controller
         $this->post_retriever = $this->initializePostRetriever($request);
         //on passe les critères de tri à la vue
         $args['sort_params'] = array(
-            'filter' => $this->post_retriever->getFilter(),
             'order_by' => $this->post_retriever->getOrderBy(),
             'sort' => $this->post_retriever->getOrder()
         );

@@ -12,7 +12,6 @@ class PostRetriever{
     private $order_params;
     private $order_by;
     private $order;
-    private $filter;
     private $limit;
 
     public function __construct(EntityManagerInterface $em, TokenStorageInterface $token_storage, $adminListItemsNumber){
@@ -26,7 +25,6 @@ class PostRetriever{
         } else{
             $this->order = 'ASC'; 
         }
-        $this->filter = null; //par défaut on ne filtre pas les posts.
     }
 
     public function addOrderParams(Array $array){
@@ -60,15 +58,6 @@ class PostRetriever{
         return $this;
     }
 
-    public function getFilter(){
-        return $this->filter;
-    }
-
-    public function setFilter($filter){
-        $this->filter = $filter;
-        return $this;
-    }
-
     public function setLimit(int $limit){
         $this->limit = $limit;
         return $this;
@@ -79,13 +68,6 @@ class PostRetriever{
     }
 
     public function getPosts(){
-        $filter_camel = explode('-', $this->filter);
-        foreach($filter_camel as $k => $v){
-            $filter_camel[$k] = ucfirst($v);
-        }
-        $filter_camel = implode('', $filter_camel);
-        $method_name = 'get' . $filter_camel . 'Posts';
-        // var_dump($method_name);
-        return $this->repository->$method_name($this->token_storage->getToken()->getUser(), $this->order_params[$this->order_by], $this->limit, $this->order);
+        return $this->repository->getPosts($this->token_storage->getToken()->getUser(), $this->order_params[$this->order_by], $this->limit, $this->order);
     }
 }
