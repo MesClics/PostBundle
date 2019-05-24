@@ -91,6 +91,7 @@ class CollectionController extends Controller{
             'currentSection' => 'edition',
             'subSection' => 'collections',
             'collectionSection' => 'edit',
+            'collection' => $collection,
             'update_collection_form' => $form->createView()
         );
 
