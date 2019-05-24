@@ -2,23 +2,23 @@
 
 namespace MesClics\PostBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
-use MesClics\PostBundle\Form\MesClicsCollectionType;
-use MesClics\PostBundle\Repository\CollectionRepository;
-use MesClics\PostBundle\Entity\Collection;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\AbstractType;
+use MesClics\PostBundle\Entity\Collection;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use MesClics\PostBundle\Form\MesClicsCollectionType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use MesClics\PostBundle\Repository\CollectionRepository;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use MesClics\PostBundle\Form\MesClicsPostsCollectionEmbedType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class PostType extends AbstractType
 {
@@ -29,32 +29,25 @@ class PostType extends AbstractType
     {
         $builder
         ->add('title', TextType::class, array(
-            'label' => 'Titre de la publication',
             'required' => false
         ))
         ->add('content', CKEditorType::class, array(
-            'label' => 'Rédigez votre publication',
             'required' => false
         ))
         ->add('date_publication', DateTimeType::class, array(
-            'label' => 'Date de mise en ligne',
             'required' => false
         ))
         ->add('date_peremption', DateTimeType::class, array(
-            'label' => 'Date de fin de mise en ligne',
             'required' => false
         ))
         ->add('visibilite', ChoiceType::class, array(
-            'label' => 'Visibilité de la publication',
             'expanded' => true,
             'choices' => array(
                 'public' => 'public',
                 'privé' => 'private'
-            ),
-            'empty_data' => 'private'
+            )
         ))
         ->add('collections_select', EntityType::class, array(
-            'label' => 'associer à une collection',
             'class' => 'MesClicsPostBundle:Collection',
             'query_builder' => function(CollectionRepository $repo){
                 return $repo->getCollectionsQB('post');
@@ -64,7 +57,7 @@ class PostType extends AbstractType
                 return $collection->getFormLabel();
             },
             'choice_attr' => function(Collection $collection, $key, $index){
-                return ['class' => '[ oocss-form-input-button ]',
+                return ['class' => 'oocss-form-input-button',
                         'title' => $collection->getDescription()];
             },
             'expanded' => true,
@@ -74,15 +67,13 @@ class PostType extends AbstractType
         ->add('collections_add', CollectionType::class, array(
             'label' => 'associer à une collection',
             'property_path' => 'collections',
-            'entry_type' => MesClicsCollectionType::class,
+            'entry_type' => MesClicsPostsCollectionEmbedType::class,
             'allow_add' => true,
             'allow_delete' => false,
             'required' => false,
             'mapped' => false
         ))
-        ->add('submit', SubmitType::class, array(
-            'label' => 'Ajouter'
-        ));
+        ->add('submit', SubmitType::class);
 
         // $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event){
         //     //on récupère tous les nouveaux champs collection

@@ -6,26 +6,17 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class MesClicsCollectionType extends AbstractType
+class MesClicsPostsCollectionEmbedType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $available_collections = $options['available_collections'];
         $builder
         ->add('name', TextType::class)
-        ->add('entity', ChoiceType::class, array(
-            'expanded' => false,
-            'multiple' => false,
-            'choices' => $available_collections
-        ))
-        ->add('description', TextType::class)
-        ->add('submit', SubmitType::class);
+        ->add('description', TextType::class);
     }
     
     /**
@@ -34,8 +25,7 @@ class MesClicsCollectionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MesClics\PostBundle\Entity\Collection',
-            'available_collections' => null
+            'data_class' => 'MesClics\PostBundle\Entity\Collection'
         ));
     }
 
@@ -44,7 +34,7 @@ class MesClicsCollectionType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'mesclics_postbundle_collection';
+        return 'mesclics_postbundle_postscollectionembed';
     }
 
 
