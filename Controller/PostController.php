@@ -121,7 +121,7 @@ class PostController extends Controller
      * @ParamConverter("post", options={"mapping":{"post_id": "id"}})
      * @Security("has_role('ROLE_WRITER')")
      */
-    public function editAction(Post $post, Request $request){
+    public function updateAction(Post $post, Request $request){
         //on vérifie que l'utilisateur courant fasse bien partie des auteurs de la publication
         $user = $this->token_storage->getToken()->getUser();
         if(!$post->getAuthors()->contains($user)){
@@ -134,7 +134,7 @@ class PostController extends Controller
         if($request->isMethod('POST')){
             $this->form_manager->handle($form);
             if($this->form_manager->hasSucceeded()){
-                $args['post_id'] = $form_manager->getResult()->getID();
+                $args['post_id'] = $this->form_manager->getResult()->getID();
                 return $this->redirectToRoute("mesclics_admin_post", $args);
             }
         }
