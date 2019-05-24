@@ -1,4 +1,11 @@
-<h2 class="[ oocss-title-section ]">Ajouter une publication</h2>
-    {% include "MesClicsPostBundle:Widgets:post-form.html.twig" with { post_form: new_post_form, submit_label: 'ajouter' } %}
+<div class="oocss-widget highlight large posts-new">
+    <div class="oocss-widget--head">
+        <h2 class="oocss-widget--title">Ajouter une publication</h2>
+    </div>
 
+    <div class="oocss-widget--content">
+        {% include "MesClicsPostBundle:Widgets:post-form.html.twig" with { post_form: new_post_form, submit_label: 'ajouter' } %}
+    </div>
+
+</div>
 

@@ -1,2 +1,10 @@
-<h2>Modifier une publication</h2>
-{% include "MesClicsPostBundle:Widgets:post-form.html.twig" with { post_form: edit_post_form, submit_label: 'modifier' } %}
+<div class="oocss-widget highlight large posts-edit">
+    <div class="oocss-widget--head">
+        <h2 class="oocss-widget--title">Modifier une publication</h2>
+    </div>
+
+    <div class="oocss-widget--content">
+        {% include "MesClicsPostBundle:Widgets:post-form.html.twig" with { post_form: edit_post_form, submit_label: 'modifier' } %}
+    </div>
+
+</div>

@@ -1,0 +1,24 @@
+
+<section class="oocss-widget large collections-list">
+     <div class="oocss-widget--head">
+          <h2 class="oocss-widget--title">Liste des collections</h2>
+     </div>
+
+     <div class="oocss-widget--content">
+          <table class="oocss-table oocss-full-container-width">
+               <thead class="oocss-table-head-row">
+                    <th>type d'objet</th>
+                    <th>nom</th>
+                    <th>description</th>
+               </thead>
+
+               {% for collection in collections %}
+               <tr class="oocss-table-row oocss-clickable-table-row">
+                    <td class="oocss-table-data">{{ collection.entity }}</td>
+                    <td class="oocss-table-data"><a href="{{ path('mesclics_admin_collection', {'collection_id': collection.id }) }}" title="voir la collection">{{ collection.name }}</a></td>
+                    <td class="oocss-table-data">{{ collection.description }}</td>
+               </tr>
+               {% endfor %}
+          </table>
+     </div>
+</section>

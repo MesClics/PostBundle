@@ -1,8 +1,7 @@
-{{ form_start(collection_form, {'attr': { 'class': 'collection'}})}}
+{{ form_start(collection_form, {'attr': { 'class': 'collection embedded'}})}}
+{% if label is defined %}
+    <label class="oocss-label">{{ label }}</label>
+{% endif %}
     {{ form_row(collection_form.name, {'label': 'nom de la collection', 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'choisir un nom unique et facilement identifiable pour la collection'}) }}
     {{ form_row(collection_form.description, {'label': 'description', 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'expliquer plus en détails à quoi cette collection correspond'}) }}
-    {{ form_row(collection_form.entity, {'label': 'type d\'objets constituant la collection'}) }}
-    {{ form_row(collection_form.submit, {'label': submit_label|default("ajouter") }) }}
-
-    {{ form_widget(collection_form._token) }}
 {{ form_end(collection_form, {'render_rest': false}) }}

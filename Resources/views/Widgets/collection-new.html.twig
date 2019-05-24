@@ -1,0 +1,29 @@
+<section class="oocss-widget {{ widget_size|default("large") }} collections-new">
+<div class="oocss-widget--head">
+    <h2 class=" oocss-widget--title ">Ajouter une collection</h2>
+</div>
+
+
+
+<div class="oocss-widget--content">
+    <p>Les collections permettent de créer des groupes de publications, d'utilisateurs, de messages etc.</p>
+    <div class="oocss-widget--content-zone">
+        <h3>Collections déjà existantes</h3>
+        {% for entityType in admin_collections %}
+            <h5>{{ entityType }}</h5>
+            <ul class="oocss-block oocss-horizontal">
+                {% for collection in collections %}
+                    {% if collection.entity is same as (entityType) %}
+                        <li>
+                            <a class="oocss-button oocss-discret"
+                                href="{{ path('mesclics_admin_collection', {'collection_id': collection.id}) }}"
+                                title="{{ collection.description }}">{{ collection.name }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+    {% include "MesClicsPostBundle:Widgets:collection-form.html.twig" with { collection_form: new_collection_form, submit_label: 'ajouter la collection' } %}
+</div>
+</section>
