@@ -13,7 +13,7 @@ mesclics_admin_posts_new:
 mesclics_admin_post:
     path: publications/{post_id}/
     defaults:
-        _controller: MesClicsPostBundle:Post:edit
+        _controller: MesClicsPostBundle:Post:update
         
 #COLLECTIONS
 mesclics_admin_collections:
@@ -25,3 +25,8 @@ mesclics_admin_collections_new:
     path: collections/new/
     defaults:
         _controller: MesClicsPostBundle:Collection:new
+
+mesclics_admin_collection:
+    path: collections/{collection_id}/
+    defaults:
+        _controller: MesClicsPostBundle:Collection:update
