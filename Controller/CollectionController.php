@@ -47,6 +47,20 @@ class CollectionController extends Controller{
             "subSection" => "collections",
             "collections" => $collections
         );
+
+        //add a form to quickly add a new collection
+        $collection = new Collection();
+        $options['available_collections'] = $this->available_collections;
+        $collection_form = $this->createForm(MesClicsCollectionType::class, $collection, $options);
+        $this->collection_form_manager->handle($collection_form);
+
+        if($request->isMethod('POST')){
+            if($this->collection_form_manager->hasSucceeded()){
+                return $this->redirectToRoute('mesclics_admin_collection', array('collection_id' => $collection->getId()));            }
+        }
+
+        $args['collection_form'] = $collection_form->createView();
+
         return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
     }
 
@@ -101,6 +115,19 @@ class CollectionController extends Controller{
                 return $this->redirectToRoute('mesclics_admin_collection', array('collection_id' => $collection->getId()));
             }
         }
+
+        //add a form to quickly add a new collection
+        $collection = new Collection();
+        $options['available_collections'] = $this->available_collections;
+        $collection_form = $this->createForm(MesClicsCollectionType::class, $collection, $options);
+        $this->collection_form_manager->handle($collection_form);
+
+        if($request->isMethod('POST')){
+            if($this->collection_form_manager->hasSucceeded()){
+                return $this->redirectToRoute('mesclics_admin_collection', array('collection_id' => $collection->getId()));            }
+        }
+
+        $args['collection_form'] = $collection_form->createView();
 
         return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
     }

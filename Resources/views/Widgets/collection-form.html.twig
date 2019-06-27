@@ -1,8 +1,22 @@
-{{ form_start(collection_form, {'attr': { 'class': 'collection'}})}}
-    {{ form_row(collection_form.name, {'label': 'nom de la collection', 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'choisir un nom unique et facilement identifiable pour la collection'}) }}
-    {{ form_row(collection_form.description, {'label': 'description', 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'expliquer plus en détails à quoi cette collection correspond'}) }}
-    {{ form_row(collection_form.entity, {'label': 'type d\'objets constituant la collection'}) }}
-    {{ form_row(collection_form.submit, {'label': submit_label|default("ajouter") }) }}
+{% if isSlideshow is defined and isSlideshow %}
+    <div class="oocss-slideshow">
+        {{ form_start(collection_form, {'attr': { 'class': 'collection oocss-slideshow--content'}})}}
+            {{ form_row(collection_form.entity, {'label': 'de quel type d\'objets la collection sera-t-elle constituée?', 'attr': {'class': 'oocss-slideshow--step'}}) }}
+            {{ form_row(collection_form.name, {'label': 'quel nom donner à la collection?', 'attr': {'class': 'oocss-slideshow--step'}, 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'choisir un nom unique et facilement identifiable pour la collection'}) }}
+            {{ form_row(collection_form.description, {'label': 'à quoi correspond cette collection?', 'attr': {'class': 'oocss-slideshow--step'} , 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'décrire plus en détails cette collection'}) }}
+            {{ form_row(collection_form.submit, {'label': submit_label|default("ajouter la nouvelle collection"), 'attr': {'class': 'oocss-slideshow--step'} }) }}
 
-    {{ form_widget(collection_form._token) }}
-{{ form_end(collection_form, {'render_rest': false}) }}
+            {{ form_widget(collection_form._token) }}
+        {{ form_end(collection_form, {'render_rest': false}) }}
+        <div class="oocss-slideshow--slider"></div>
+    </div>
+{% else %}
+    {{ form_start(collection_form, {'attr': { 'class': 'collection'}})}}
+        {{ form_row(collection_form.name, {'label': 'nom de la collection', 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'choisir un nom unique et facilement identifiable pour la collection'}) }}
+        {{ form_row(collection_form.description, {'label': 'description', 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'expliquer plus en détails à quoi cette collection correspond'}) }}
+        {{ form_row(collection_form.entity, {'label': 'type d\'objets constituant la collection'}) }}
+        {{ form_row(collection_form.submit, {'label': submit_label|default("ajouter") }) }}
+
+        {{ form_widget(collection_form._token) }}
+    {{ form_end(collection_form, {'render_rest': false}) }}
+{% endif %}
