@@ -111,7 +111,7 @@ class PostController extends Controller
             'currentSection' => 'edition',
             'subSection' => 'posts',
             'postSection' => 'new',
-            'new_post_form' => $post_form->createView()
+            'new_post_form' => $post_form->createView(),
         );
 
         return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
