@@ -2,17 +2,13 @@
 
     <div class="oocss-form-fieldset">
         {{ form_row(post_form.date_publication, {'label': 'date de mise en ligne', 'help': 'laisser vide pour enregistrer comme brouillon'}) }}
-        {{ form_row(post_form.visibilite, {'label': 'visibilité de la publication', 'widget_attr': {'class': 'oocss-horizontal oocss-center-h'}}) }}
+        {{ form_row(post_form.visibilite, {'label': 'visibilité de la publication', 'attr': {'class': 'oocss-center-h'}}) }}
         {{ form_row(post_form.date_peremption, {'label': 'date de dépublication'}) }}
     </div>
     {{ form_row(post_form.title, {'label': 'titre de la publication', 'widget_attr': {'class': 'titre'}}) }}
     {{ form_row(post_form.content, {'label': 'rédiger la publication'}) }}
 
     <div class="oocss-form-fieldset oocss-vertical">
-       {# {{ form_row(post_form.collections_select, {'attr': {'class': 'oocss-full-container-width'}, 'label': 'associer à une collection', 'help': 'sélectionner une ou plusieurs collections existantes et/ou en créer une nouvelle'}) }}
-        <div class="oocss-js-dynamic-target oocss-js-dynamic-template" data-prototype='{{ form_row(post_form.collections_add.vars.prototype, {'label': 'ajouter une collection'}) }}'></div>
-        <button class="oocss-button oocss-button-rounded oocss-discret oocss-js-dynamic-button" title="créer une nouvelle collection">+</button> #}
-
         {{ form_row(post_form.collections_select, {'attr': {'class': 'oocss-full-container-width'}, 'label': 'associer à une collection', 'help': 'sélectionner une ou plusieurs collections existantes et/ou en créer de nouvelles'}) }}
         <div class="oocss-js-dynamic-target oocss-js-dynamic-template" data-prototype='{% with {'collection_form': post_form.collections_add.vars.prototype, 'label': 'ajouter une collection'} %}{% include "MesClicsPostBundle:Widgets:collection-embedded-form.html.twig" %}{% endwith %}'>
         </div>
