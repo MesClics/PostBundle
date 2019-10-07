@@ -1,9 +1,10 @@
 <?php
 namespace MesClics\PostBundle\Form\FormManager;
 
-use MesClics\UtilsBundle\FormManager\FormManager;
 use Symfony\Component\Form\Form;
 use MesClics\PostBundle\Entity\Collection;
+use MesClics\UtilsBundle\FormManager\FormManager;
+use MesClics\PostBundle\Event\MesClicsPostCategorizationEvent;
 
 class PostFormManager extends FormManager{
     const ERROR_NOTIFICATION_SINGULIER = "La publication n'a pas pu être créée. Veuillez vérifier les données saisies.";
@@ -39,8 +40,9 @@ class PostFormManager extends FormManager{
             //on envoie les modifs à la bdd
             //on persiste notre objet
             $this->getEm()->persist($object);
-            $this->getEm()->flush();
+            // $this->getEm()->flush();
             $this->setResult($object);
+
             $result_count = $this->getResultCount();
             $this->setResultCount($result_count++);
             $this->setSuccess(true);

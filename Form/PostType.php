@@ -5,11 +5,12 @@ namespace MesClics\PostBundle\Form;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
+use MesClics\PostBundle\Form\DTO\PostDTO;
 use MesClics\PostBundle\Entity\Collection;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use MesClics\PostBundle\Form\MesClicsCollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use MesClics\PostBundle\Repository\CollectionRepository;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -52,7 +53,6 @@ class PostType extends AbstractType
             'query_builder' => function(CollectionRepository $repo){
                 return $repo->getCollectionsQB('post');
             },
-            'property_path' => 'collections',
             'choice_label' => function(Collection $collection){
                 return $collection->getFormLabel();
             },
@@ -66,7 +66,7 @@ class PostType extends AbstractType
         ))
         ->add('collections_add', CollectionType::class, array(
             'label' => 'associer à une collection',
-            'property_path' => 'collections',
+            'property_path' => 'collections_add',
             'entry_type' => MesClicsPostsCollectionEmbedType::class,
             'allow_add' => true,
             'allow_delete' => false,
@@ -75,39 +75,19 @@ class PostType extends AbstractType
         ))
         ->add('submit', SubmitType::class);
 
-        // $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event){
-        //     //on récupère tous les nouveaux champs collection
-        //     if(isset($event->getData()['collections_select'])){
-        //         $collections = $event->getData()['collections_select'];
-        //         foreach($collections as $collection){
-        //             // var_dump($collection);
-        //         }
-        //     }
-        //     if(isset($event->getData()['collections_add'])){
-        //         $collections_add = $event->getData()['collections_add'];
-        //         foreach($collections_add as $collection){
-        //             // var_dump($collection);
-        //         }
-        //     }
-        // });
 
-        // $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event){
-        //     $data = $event->getData();
-        //     $collections = $data->getCollections();
-        //     foreach($collections as $collection){
-        //         var_dump($collection->getName());
-        //     }
-        //     die();
+        // $builder->addEventListener(FormEvents::POST_SUBMIT, function(FormEvent $event){
+        //     dump($event); die();
         // });
     }
-    
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MesClics\PostBundle\Entity\Post'
+            // 'data_class' => 'MesClics\PostBundle\Entity\Post',
+            'data_class' => PostDTO::class
         ));
     }
 

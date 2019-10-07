@@ -71,12 +71,10 @@ class Post
     private $authors;
 
     /**
-     * @ORM\ManyToMany(targetEntity = "MesClics\PostBundle\Entity\Collection", cascade={ "persist" })
+     * @ORM\ManyToMany(targetEntity = "MesClics\PostBundle\Entity\Collection", cascade={"persist"})
      * @ORM\JoinTable(name="mesclics_post_collection")
      */
     private $collections;
-
-
 
     /**
      * Get id.
@@ -302,7 +300,7 @@ class Post
     {
         return $this->collections;
     }
-
+    
     public function __construct(){
         $this->authors = new ArrayCollection();
         $this->collections = new ArrayCollection();

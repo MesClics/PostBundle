@@ -16,7 +16,7 @@
     </div>
     
 
-        {{ form_row(post_form.submit, {'label': submit_label}) }}
+        {{ form_row(post_form.submit, {'label': submit_label, 'attr': {'class': submit_class|default("")}}) }}
 
     {{ form_row(post_form._token) }}
 {{ form_end(post_form, {'render_rest': false}) }}
