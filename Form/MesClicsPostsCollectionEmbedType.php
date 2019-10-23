@@ -31,7 +31,7 @@ class MesClicsPostsCollectionEmbedType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Collection::class
+            'data_class' => PostCollectionDTO::class
         ));
     }
 

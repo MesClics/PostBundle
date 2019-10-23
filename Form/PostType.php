@@ -3,6 +3,7 @@
 namespace MesClics\PostBundle\Form;
 
 use Symfony\Component\Form\FormEvent;
+use MesClics\PostBundle\Form\DTO\Test;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use MesClics\PostBundle\Form\DTO\PostDTO;
@@ -64,21 +65,13 @@ class PostType extends AbstractType
             'multiple' => true,
             'required' => false
         ))
-        ->add('collections_add', CollectionType::class, array(
-            'label' => 'associer à une collection',
-            'property_path' => 'collections_add',
+        ->add('newcollections', CollectionType::class, array(
             'entry_type' => MesClicsPostsCollectionEmbedType::class,
             'allow_add' => true,
             'allow_delete' => false,
-            'required' => false,
-            'mapped' => false
+            'prototype' => true,            
         ))
         ->add('submit', SubmitType::class);
-
-
-        // $builder->addEventListener(FormEvents::POST_SUBMIT, function(FormEvent $event){
-        //     dump($event); die();
-        // });
     }
     /**
      * {@inheritdoc}

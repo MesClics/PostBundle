@@ -103,7 +103,6 @@ class PostController extends Controller
         //on traite éventuellement le formulaire
         if($request->isMethod('POST')){
             $post_form->handleRequest($request);
-            
             if($post_form->isSubmitted() &&  $post_form->isValid()){
                 // TODO: map to Post Entity + addAuthor
                 $post = new Post();
@@ -154,28 +153,25 @@ class PostController extends Controller
         //on traite éventuellement le formulaire si la requête est de type post
         if($request->isMethod('POST')){
             $form->handleRequest($request);
-            
-            dump($form->get('collections_add')->getData()[0]); die();
-
             if($form->isSubmitted() && $form->isValid()){
                 $before_update = clone $post;
                 $post_dto = $form->getData();
                 //on récupère les éventuelles nouvelles collections:
-                $collections = $form->get('collections_add')->getData();
-                if($collections){
-                    //pour chaque nouvelle collection
-                    foreach($collections as $collection){
-                        //on crée un nvl objet Collection dont l'attribut entité est défini à 'post'
-                        $new_collec = new Collection('post');
-                        //auquel on transmet les infos name et description du formulaire
-                        $new_collec->setName($collection->getName());
-                        $new_collec->setDescription($collection->getDescription());
-                        //on persiste notre objet
-                        $em->persist($new_collec);
-                        //on ajoute la nouvelle collection à notre objet post
-                        $post_dto->addCollection($new_collec);
-                    }
-                }
+                // $collections = $form->get('newcollections')->getData();
+                // if($collections){
+                //     //pour chaque nouvelle collection
+                //     foreach($collections as $collection){
+                //         //on crée un nvl objet Collection dont l'attribut entité est défini à 'post'
+                //         $new_collec = new Collection('post');
+                //         //auquel on transmet les infos name et description du formulaire
+                //         $new_collec->setName($collection->getName());
+                //         $new_collec->setDescription($collection->getDescription());
+                //         //on persiste notre objet
+                //         $em->persist($new_collec);
+                //         //on ajoute la nouvelle collection à notre objet post
+                //         $post_dto->addCollection($new_collec);
+                //     }
+                // }
 
                 $post_dto->mapTo($post);
                 if($post_dto->getUpdatedDatas()){

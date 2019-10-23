@@ -10,27 +10,44 @@
 
     <div class="oocss-form-fieldset oocss-vertical">
         {{ form_row(post_form.collections_select, {'attr': {'class': 'oocss-full-container-width'}, 'label': 'associer à une collection', 'help': 'sélectionner une ou plusieurs collections existantes et/ou en créer de nouvelles'}) }}
-        <div class="oocss-js-dynamic-target oocss-js-dynamic-template" data-prototype='{% with {'collection_form': post_form.collections_add.vars.prototype, 'label': 'ajouter une collection'} %}{% include "MesClicsPostBundle:Widgets:collection-embedded-form.html.twig" %}{% endwith %}'>
+        {#<div class="oocss-js-dynamic-target oocss-js-dynamic-template" data-prototype='{% with {'collection_form': post_form.newcollections} %}{% include "MesClicsPostBundle:Widgets:collection-embedded-form.html.twig" %}{% endwith %}'>
+        </div>#}
+        {#
+        {% set nameInputOptions = {'label': 'nom de la nouvelle collection', 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'choisir un nom unique et facilement identifiable pour la collection'} %}
+        {% set descriptionInputOptions = {'label': 'description de la nouvelle collection', 'help': 'expliquer plus en détails à quoi cette collection correspond', 'widget_attr': {'class': 'oocss-full-container-width'}} %}
+        {% set prototypeChildrenOptions = {'name': nameInputOptions, 'description': descriptionInputOptions} %}
+
+            <div class="oocss-form-row ooccs-full-container-width oocss-js-dynamic-target oocss-js-dynamic-template" data-prototype="
+            {% filter escape %}
+                {{ include('MesClicsPostBundle:Widgets:collection-embedded-form.html.twig', { 'form': post_form.newcollections.vars.prototype }) }}
+            {% endfilter %}
+        ">
+        {% if post_form.newcollections.label is defined %}
+        <label class="oocss-label test">{{ post_form.newcollections.label }}</label>
+        {% endif %}
         </div>
-        <button class="oocss-button oocss-button-rounded oocss-discret oocss-js-dynamic-button" title="créer une nouvelle collection">+</button> 
+        <button class="oocss-button oocss-button-rounded oocss-discret oocss-js-dynamic-button" title="ajouter une collection">+</button>
+        #}
+       {{ form_row(post_form.newcollections, {'attr': {'class': 'oocss-full-container-width'}, 'label': 'ajouter une collection', 'button': {'title': 'ajouter une collection', 'label': '+'}}) }}
+        {# <div class="oocss-js-dynamic-target oocss-js-dynamic-template" data-prototype='{{ form_widget(post_form.newcollections.vars.prototype)|e('html_attr') }}'></div> #}
     </div>
-    
 
+   {# <div class="oocss-form-fieldset oocss-vertical">
+        <div class="oocss-js-dynamic-target oocss-js-dynamic-template" data-prototype='{{ form_widget(post_form.tests.vars.prototype)|e('html_attr') }}'></div>
+        <button class="oocss-button oocss-button-rounded oocss-discret oocss-js-dynamic-button" title="créer un formulaire test">+</button>
+    </div> #}
         {{ form_row(post_form.submit, {'label': submit_label, 'attr': {'class': submit_class|default("")}}) }}
-
     {{ form_row(post_form._token) }}
 {{ form_end(post_form, {'render_rest': false}) }}
 
 <!-- on ajoute le script pour le traitement dynamique du champ collections -->
 <script type="text/javascript">
-    const dynamicField = document.querySelector('.oocss-js-dynamic-template');
-    const addBtn = document.querySelector('.oocss-js-dynamic-button');
-    const targetDiv = document.querySelector('.oocss-js-dynamic-target');
+    const addBtns = document.querySelectorAll('.oocss-js-dynamic-button');
 
     //on définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
     var index = 0;
 
-    function addField(dynamicField){
+    function addField(dynamicField, targetDiv){
       // Dans le contenu de l'attribut « data-prototype », on remplace :
       // - le texte "__name__label__" qu'il contient par le label du champ
       // - le texte "__name__" qu'il contient par le numéro du champ
@@ -41,7 +58,8 @@
 
         //console.log(dataPrototype);
         //var label = dataPrototype.replace('/__name__label__/g', dataMyLabel + (index+1));
-        var field = dataPrototype.replace(/__name__/g, index.toString());
+        var field = dataPrototype.replace(/__name__/g, index);
+        console.log(field);
 
         //on ajoute le champ modifié à la fin de la balise
         var newDiv = document.createElement('div');
@@ -55,10 +73,17 @@
         index++;
     }
 
-    addBtn.addEventListener('click', function(e){
-        //on désactive la cible du "lien"
-        e.preventDefault();
-        //on ajoute un nouveau champ
-        addField(dynamicField);
-    });
+    for(let i = 0; i < addBtns.length; i++){
+        let addBtn = addBtns[i];
+        let dynamicField = addBtn.parentNode.querySelector('.oocss-js-dynamic-template');
+        let targetDiv = addBtn.parentNode.querySelector('.oocss-js-dynamic-target');
+
+        
+        addBtn.addEventListener('click', function (e) {
+            //on désactive la cible du "lien"
+            e.preventDefault();
+            //on ajoute un nouveau champ
+            addField(dynamicField, targetDiv);
+        });
+    }
 </script>

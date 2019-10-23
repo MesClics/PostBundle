@@ -1,7 +1,4 @@
-{{ form_start(collection_form, {'attr': { 'class': 'collection embedded'}})}}
-{% if label is defined %}
-    <label class="oocss-label">{{ label }}</label>
-{% endif %}
-    {{ form_row(collection_form.name, {'label': 'nom de la collection', 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'choisir un nom unique et facilement identifiable pour la collection'}) }}
-    {{ form_row(collection_form.description, {'label': 'description', 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'expliquer plus en détails à quoi cette collection correspond'}) }}
-{{ form_end(collection_form, {'render_rest': false}) }}
+<div class="oocss-form-fieldset oocss-vertical oocss-form embedded">
+    {{ form_row(form.name, {'label': 'nom de la collection', 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'choisir un nom unique pour la collection'}) }}
+    {{ form_row(form.description, {'label': 'description', 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'expliquer plus en détails ce à quoi cette collection correspond'}) }}
+</div>

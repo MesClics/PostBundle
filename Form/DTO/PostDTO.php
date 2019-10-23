@@ -4,7 +4,9 @@ namespace MesClics\PostBundle\Form\DTO;
 
 use MesClics\PostBundle\Entity\Post;
 use Doctrine\ORM\EntityManagerInterface;
+use MesClics\PostBundle\Entity\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use MesClics\PostBundle\Form\DTO\PostCollectionDTO;
 use MesClics\UtilsBundle\DataTransportObject\Mapper\MappingArrayItem;
 use MesClics\UtilsBundle\DataTransportObject\DataTransportObjectToEntity;
 
@@ -15,8 +17,9 @@ class PostDTO extends DataTransportObjectToEntity{
     public $date_peremption;
     public $visibilite;
     public $collections_select;
-    public $collections_add;
+    private $newcollections;
     public $entity_manager;
+    private $tests;
 
     public function __construct(EntityManagerInterface $em){
         parent::__construct();
@@ -36,7 +39,7 @@ class PostDTO extends DataTransportObjectToEntity{
             $content_mapping,
             $date_publication_mapping,
             $date_peremption_mapping,
-            $visibilite_mapping,
+            $visibilite_mapping
         );
 
         return $mapping_array;
@@ -64,9 +67,7 @@ class PostDTO extends DataTransportObjectToEntity{
             }
         }
 
-        dump($this->collections_add);
-        foreach($this->collections_add as $collection){
-            dump("here we are"); die();
+        foreach($this->newcollections as $collection){
             //on crée un nvl objet Collection dont l'attribut entité est défini à 'post'
             $new_collec = new Collection('post');
             //auquel on transmet les infos name et description du formulaire
@@ -77,5 +78,21 @@ class PostDTO extends DataTransportObjectToEntity{
             //on ajoute la nouvelle collection à notre objet post
             $entity->addCollection($new_collec);
         }
+    }
+
+    public function getNewcollections(){
+        return $this->newcollections;
+    }
+
+    public function setNewcollections(array $collections){
+        $this->newcollections = $collections;
+    }
+
+    public function setTests(array $tests){
+        $this->tests = $tests;
+    }
+
+    public function getTests(){
+        return $this->tests;
     }
 }
