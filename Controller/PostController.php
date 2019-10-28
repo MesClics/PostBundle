@@ -114,6 +114,11 @@ class PostController extends Controller
                 $em->persist($post);
                 $em->flush();
 
+                // check if post is published
+                if($post->isPublished()){
+                    $publication_event = MesClicsPostPublicationEvent($post);
+                    $ed->dispatch("mesclics_post.publciation", $publication_event);
+                }
                 //dispatch a MesClicsPostCreationEvent :
                 $event = new MesClicsPostCreationEvent($post);
                 $ed->dispatch("mesclics_post.creation", $event);
@@ -192,5 +197,9 @@ class PostController extends Controller
         );
 
         return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
+    }
+
+    public function removeAction(Post $post){
+
     }
 }

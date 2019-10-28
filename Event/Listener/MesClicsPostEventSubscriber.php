@@ -3,6 +3,8 @@ namespace MesClics\PostBundle\Event\Listener;
 
 use Psr\Log\LoggerInterface;
 use MesClics\PostBundle\Event\MesClicsPostEvents;
+use MesClics\NavigationBundle\Navigator\Navigator;
+use MesClics\PostBundle\Actions\MesClicsPostActions;
 use MesClics\PostBundle\Event\MesClicsPostUpdateEvent;
 use MesClics\PostBundle\Event\MesClicsPostRemovalEvent;
 use MesClics\PostBundle\Event\MesClicsPostCreationEvent;
@@ -17,11 +19,13 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
     public $logger;
     protected $session;
     protected $event_dispatcher;
+    protected $navigator;
 
-    public function __construct(LoggerInterface $logger, SessionInterface $session, EventDispatcherInterface $ed){
+    public function __construct(LoggerInterface $logger, SessionInterface $session, EventDispatcherInterface $ed, Navigator $navigator){
         $this->logger = $logger;
         $this->session = $session;
         $this->event_dispatcher = $ed;
+        $this->navigator = $navigator;
     }
 
     public function addFlash(string $label, string $message){
@@ -41,28 +45,84 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
     }
 
     public function onCreation(MesClicsPostCreationEvent $event){
+        $post = $event->getPost();
+        switch ($post->getVisibilite()){
+            case "public":
+            $visibilite = "publique";
+            break;
+
+            case "private":
+            $visibilite = "privée";
+            break;
+        }
         // add a flash message
-        $this->addFlash('success', 'Votre nouvelle publication a bien été ajoutée.');
+        $message = $this->getCreationMessage($post);
+
+        $this->addFlash('success', $message);
+        // add as action to navigator
+        $action = MesClicsPostActions::creation($post);
+        $this->navigator->getUser()->getChronology()->addAction($action);
     }
 
     public function onUpdate(MesClicsPostUpdateEvent $event){
-        // add a flash message
-        $this->addFlash('success', 'Votre publication ' . $event->getAfterUpdate()->getTitle() . ' a bien été modifiée.');
+        $beforeUpdate = $event->getBeforeUpdate();
+        $afterUpdate = $event->getAfterUpdate();
+        $beforeUpdateFilters = $beforeUpdate->getFilters();
+        $afterUpdateFilters = $afterUpdate->getFilters();
+        
+        // dispatch publications Events
+        if($beforeUpdate->getDatePublication() !== $afterUpdate->getDatePublication()){
+            // publication date has changed
+            if(($beforeUpdate->isOnline() || $beforeUpdate->willBePublished()) && ($afterUpdate->isOnline() || $afterUpdate->willBePublished())){
+                $publicationEvent = new MesClicsPostPublicationEvent($afterUpdate);
+            }
+            //publication is now online
+            if(!$beforeUpdate->isOnline() && $afterUpdate->isOnline()){
+                $publicationEvent = new MesClicsPostPublicationEvent($afterUpdate);
+            }
+            //publication is now offline
+            if($beforeUpdate->isOnline() && !$afterUpdate->isOnline()){
+                $publicationEvent = new MesClicsPostDepublicationEvent($afterUpdate);
+            }
+            //TODO: publication is now draft
+
+            $this->event_dispatcher->dispatch($publicationEvent);
+        } else{
+            // add a flash message for non publication dates updates
+            $this->addFlash('success', 'Votre publication ' . $event->getAfterUpdate()->getTitle() . ' a bien été modifiée.');
+        }
+        // add as action to navigator
+        $action = MesClicsPostActions::update($post);
+        $this->navigator->getUser()->getChronology()->addAction($action);
+
     }
 
     public function onRemoval(MesClicsPostRemovalEvent $event){
         // add a flash message
-        $this->addFlash('success', 'Votre publication ' . $event->getPost()->getTitle() . 'a bien été supprimée.');
+        $this->addFlash('success', 'Votre publication ' . $event->getPost()->getTitle() . ' a bien été supprimée.');
+        // add as action to navigator
+        $action = MesClicsPostActions::removal($post);
+        $this->navigator->getUser()->getChronology()->addAction($action);
     }
 
     public function onPublication(MesClicsPostPublicationEvent $event){
         // add a flash message
-        $this->addFlash('success', 'Votre publication est publiée.');
+        $post = $event->getPost();
+        if($post->willBePublished()){
+            $message = "Votre publication " . $event->getPost()->getTitle() . " sera publiée le " . $post->getDatPublication()->format("d/m/Y à H\hm");
+        }
+
+        if($post->isOnline()){
+            $message = "Votre publication " . $event->getPost()->getTitle() . " est publiée";
+        }
+
+        $message .= " en mode " . $post->getVisibilite() . ".";
+        $this->addFlash('success', $message);
     }
 
     public function onDepublication(MesClicsPostDepublicationEvent $event){
         // add a flash message
-        $this->addFlash('success', 'Votre publication est dépubliée.');
+        $this->addFlash('success', 'Votre publication ' . $event->getPost()->getTitle() . ' est dépubliée.');
     }
 
     public function onCategorization(MesClicsPostCategorizationEvent $event){
@@ -88,5 +148,31 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
         }
 
         $this->addFlash('success', $message);
+    }
+
+    private function getCreationMessage(Post $post){
+        
+        if($post->isOnline()){
+            $message = "Votre nouvelle publication " . $visibilite . " a bien été publiée";
+             if($post->willBeUnpublished()){
+                 $message .= " et sera en ligne jusqu'au " . $post->getDatePeremption()->format('d/m/Y à H\hi');
+             }
+             $message .= ".";
+        } else{
+            $message = "Votre publication " . $visibilite . " a bien été enregistrée";
+            if($post->isDraft()){
+                $message .= " en tant que brouillon";
+            }
+            if($post->willBePublished()){
+                if($post->willBeUnpublished()){
+                    $publicationDates = " du " . $post->getDatePublication()->format('d/m/Y à H\hi') . " au " . $post->getDateDepublication()->format('d/m/Y à H\hi');
+                } else{
+                    $publicationDates = " le " . $post->getDatePublication()->format('d/m/Y à H\hi');
+                }
+                $message = " et sera publiée le " . $publicationDates;
+            }
+        }
+
+        return $message;
     }
 }
