@@ -99,13 +99,14 @@ class PostController extends Controller
      */
     public function newAction(Request $request, EventDispatcherInterface $ed, EntityManagerInterface $em){
         //on génère un formulaire pour la création d'uun nouveau post.
-        $post_form = $this->createForm(PostType::class);
+        $postDTO = new PostDTO($em);
+        $post_form = $this->createForm(PostType::class, $postDTO);
 
         //on traite éventuellement le formulaire
         if($request->isMethod('POST')){
             $post_form->handleRequest($request);
             if($post_form->isSubmitted() &&  $post_form->isValid()){
-                // TODO: map to Post Entity + addAuthor
+                //map DTO to Post Entity + addAuthor
                 $post = new Post();
                 $post_form->getData()->mapTo($post);
                 $post->addAuthor($this->token_storage->getToken()->getUser());
