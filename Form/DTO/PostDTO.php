@@ -18,8 +18,8 @@ class PostDTO extends DataTransportObjectToEntity{
     public $visibilite;
     public $collections_select;
     private $newcollections;
+    private $old_collections;
     public $entity_manager;
-    private $tests;
 
     public function __construct(EntityManagerInterface $em){
         parent::__construct();
@@ -52,7 +52,13 @@ class PostDTO extends DataTransportObjectToEntity{
         }
     }
 
+    public function afterMappingFrom(Post $entity){
+        // hydrate old_collections property before any update
+        $this->old_collections = $entity->getCollections()->toArray();
+    }
+
     public function beforeMappingTo(Post $entity){
+
         //add collections not already saved in database
         foreach($this->collections_select as $collection){
             if(!$entity->getCollections()->contains($collection)){
@@ -88,11 +94,7 @@ class PostDTO extends DataTransportObjectToEntity{
         $this->newcollections = $collections;
     }
 
-    public function setTests(array $tests){
-        $this->tests = $tests;
-    }
-
-    public function getTests(){
-        return $this->tests;
+    public function getOldCollections(){
+        return $this->old_collections;
     }
 }

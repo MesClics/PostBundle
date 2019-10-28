@@ -75,7 +75,7 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
             foreach($event->getNewCollections() as $cat){
                 $categories[] = $cat->getName();
             }
-            $message .= "La publication " . $event->getAfterUpdate()->getTitle() . " a bien été ajoutée aux collections suivantes : " . implode(", ", $categories) . '. ';
+            $message .= "La publication " . $event->getPost()->getTitle() . " a bien été ajoutée aux collections suivantes : " . implode(", ", $categories) . '. ';
         }
 
         
@@ -84,7 +84,7 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
             foreach($event->getOldCollections() as $cat){
                 $categories[] = $cat->getName();
             }
-            $message .= "La publication " . $event->getAfterUpdate()->getTitle() . " a bien été retirée des collections suivantes : " . implode(", ", $categories) . '. ';
+            $message .= "La publication " . $event->getPost()->getTitle() . " a bien été retirée des collections suivantes : " . implode(", ", $categories) . '. ';
         }
 
         $this->addFlash('success', $message);

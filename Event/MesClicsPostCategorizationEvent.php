@@ -7,51 +7,63 @@ use Doctrine\Common\Collections\ArrayCollection;
 use MesClics\UtilsBundle\Event\MesClicsObjectUpdateEvent;
 
 class MesClicsPostCategorizationEvent extends MesClicsObjectUpdateEvent{
-    public function __construct(Post $before_update, Post $after_update){
+    private $post;
+
+    public function __construct(array $before_update, array $after_update, Post $post){
+
         parent::__construct($before_update, $after_update);
+        $this->post = $post;
+    }
+
+    /**
+     *  get the post
+     */
+    public function getPost(){
+        return $this->post;
     }
 
     /**
      * get all the new categories that the post has been assigned to
      */
     public function getNewCollections(){
-        dump($this->before_update); dump($this->after_update);
-        $filteredCollection = $this->after_update->getCollections()->filter(function($collection){
-            if(!$this->before_update->getCollections()->contains($collection)){
+        $filteredCollection = array_filter($this->after_update, function($collection){
+            if(!in_array($collection, $this->before_update)){
                 return true;
             }
         });
-
-        dump($filteredCollection); die();
         
-
-        return $filteredCollection;
-
-        // $diff = array_diff($this->after_update->getCollections()->toArray(), $this->before_update->getCollections()->toArray());
-
-        // return new ArrayCollection($diff);
+        if(!empty($filteredCollection)){
+            return $filteredCollection;
+        } else{
+            return false;
+        }
     }
 
     /**
      * get all the categories that the post has been removed from
      */
     public function getOldCollections(){
-        $filteredCollection = $this->before_update->getCollections()->filter(function($collection){
-            if(!$this->after_update->getCollections()->contains($collection)){
+        $filteredCollection = array_filter($this->before_update, function($collection){
+            if(!in_array($collection, $this->after_update)){
                 return true;
             }
         });
         
-
-        return $filteredCollection;
+        if(!empty($filteredCollection)){
+            return $filteredCollection;
+        } else{
+            return false;
+        }
     }
 
     /**
-     * tells if the post has been assigned to one or more new categories or/and if it has been removed from one or more categories
+     * tells if the post has been assigned to one or more new collections or/and if it has been removed from one or more categories
      * 
      * @return array of bool with first entry respond to the answer :  "has it been assigned to one or more categories ?" and the second entry respond to the answer : "has it been removed from one or more categories ?"
      */
     public function getCategorizationType(){
+        $assigned = null; $removed = null;
+        
         if($this->getNewCollections()){
             $assigned = true;
         }

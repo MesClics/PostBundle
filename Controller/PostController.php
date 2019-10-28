@@ -7,6 +7,7 @@ use MesClics\PostBundle\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
 use MesClics\PostBundle\Form\DTO\PostDTO;
 use Symfony\Component\HttpFoundation\Request;
+use MesClics\PostBundle\Event\MesClicsPostEvents;
 use MesClics\PostBundle\PostRetriever\PostRetriever;
 use MesClics\PostBundle\Event\MesClicsPostUpdateEvent;
 use MesClics\PostBundle\Event\MesClicsPostCreationEvent;
@@ -156,35 +157,24 @@ class PostController extends Controller
             if($form->isSubmitted() && $form->isValid()){
                 $before_update = clone $post;
                 $post_dto = $form->getData();
-                //on récupère les éventuelles nouvelles collections:
-                // $collections = $form->get('newcollections')->getData();
-                // if($collections){
-                //     //pour chaque nouvelle collection
-                //     foreach($collections as $collection){
-                //         //on crée un nvl objet Collection dont l'attribut entité est défini à 'post'
-                //         $new_collec = new Collection('post');
-                //         //auquel on transmet les infos name et description du formulaire
-                //         $new_collec->setName($collection->getName());
-                //         $new_collec->setDescription($collection->getDescription());
-                //         //on persiste notre objet
-                //         $em->persist($new_collec);
-                //         //on ajoute la nouvelle collection à notre objet post
-                //         $post_dto->addCollection($new_collec);
-                //     }
-                // }
-
                 $post_dto->mapTo($post);
+
+                if($post_dto->getOldCollections() !== $post->getCollections()->toArray()){
+                    $post_dto->addUpdatedData('collections', $post_dto->getOldCollections(), $post->getCollections()->toArray());
+                }
+
                 if($post_dto->getUpdatedDatas()){
                     //dispatch MesClicsPostUpdateEvent
                     $event = new MesClicsPostUpdateEvent($before_update, $post);
-                    $ed->dispatch('mesclics_post.update', $event);
+                    $ed->dispatch(MesClicsPostEvents::UPDATE, $event);
 
-                    // dispacth MesClicsPostCategorizationEvent if needed
-                    if($before_update->getCollections() != $post->getCollections()){
-                        $cat_event = new MesClicsPostCategorizationEvent($before_update, $post);
-                        $ed->dispatch('mesclics_post.categorization', $cat_event);
+                    // dispatch MesClicsPostCategorizationEvent if needed
+                    if($post_dto->getUpdatedData("collections")){
+                        $cat_event = new MesClicsPostCategorizationEvent($post_dto->getUpdatedData("collections")[0], $post_dto->getUpdatedData("collections")[1], $post);
+                        $ed->dispatch(MesClicsPostEvents::CATEGORIZATION, $cat_event);
                     }
                 }
+                
                 $em->flush();
 
                 $args['post_id'] = $post->getID();
