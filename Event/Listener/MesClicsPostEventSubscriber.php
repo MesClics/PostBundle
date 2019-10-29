@@ -87,6 +87,10 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
                 $publicationEventName = MesClicsPostEvents::DEPUBLICATION;
             }
             //TODO: publication is now draft
+            if(!$beforeUpdate->isDraft() && $afterUpdate->isDraft()){
+                $publicationEvent = new MesClicsPostPublicationEvent($afterUpdate);
+                $publicationEventName = MesClicsPostEvents::PUBLICATION;
+            }
         }
 
         if(($beforeUpdate->getDatePeremption() !== $afterUpdate->getDatePeremption())|| ($beforeUpdate->getDatePeremption() && !$afterUpdate->getDAtePeremption())){
@@ -119,41 +123,65 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
     public function onPublication(MesClicsPostPublicationEvent $event){
         // add a flash message
         $post = $event->getPost();
+        switch ($post->getVisibilite()){
+            case "public":
+            $visibilite = "publique";
+            break;
+
+            case "private":
+            $visibilite = "privée";
+            break;
+        }
+
         if($post->willBePublished()){
-            $message = "Votre publication " . $event->getPost()->getTitle() . " sera publiée le " . $post->getDatePublication()->format("d/m/Y à H\hi");
+            $message = "Votre publication " . $visibilite . " " . $post->getTitle() . " sera publiée le " . $post->getDatePublication()->format("d/m/Y à H\i") . ".";
         }
 
         if($post->isOnline()){
-            $message = "Votre publication " . $event->getPost()->getTitle() . " est publiée";
+            $message = "Votre publication " . $visibilite . " " . $post->getTitle() . " est publiée.";
         }
 
-        $message .= " en mode " . $post->getVisibilite() . ".";
+        if($post->isDraft()){
+            $message = "Votre publication " . $visibilite . " " . $post->getTitle() . " est enregistrée comme brouillon.";
+        }
         $this->addFlash('success', $message);
     }
 
     public function onDepublication(MesClicsPostDepublicationEvent $event){
         $post = $event->getPost();
+        switch ($post->getVisibilite()){
+            case "public":
+            $visibilite = "publique";
+            break;
+
+            case "private":
+            $visibilite = "privée";
+            break;
+        }
+
         if($post->willBeUnpublished()){
             if($post->WillBePublished()){
-                $message = "Votre publication sera mise en ligne le " . $post->getDatePublication()->format("d/m/Y à H\hi") . " et sera dépubliée le " . $post->getDatePeremption()->format("d/m/y à H\hi");
+                $message = "Votre publication " . $visibilite . " " . $post->getTitle() . " sera mise en ligne le " . $post->getDatePublication()->format("d/m/Y à H\hi") . " et sera dépubliée le " . $post->getDatePeremption()->format("d/m/y à H\hi") . ".";
             } else{
-                $message = "Votre publication sera dépubliée le " . $post->getDatePeremption()->format("d/m/Y à H\hi"); 
+                $message = "Votre publication " . $visibilite . " " . $post->getTitle() . " sera dépubliée le " . $post->getDatePeremption()->format("d/m/Y à H\hi") . "."; 
             }
         }
 
         if($post->hasBeenUnpublished()){
-            $message = "Votre publication a été dépubliée";
+            $message = "Votre publication " . $visibilite . " " . $post->getTitle() . " a été dépubliée.";
         }
 
         if(!$post->willBeUnpublished() && $post->isOnline()){
-            $message = "Votre publication ne sera plus dépubliée à la date initialement prévue et restera en ligne jusqu'à nouvel ordre";
+            $message = "Votre publication " . $visibilite . " " . $post->getTitle() . " ne sera plus dépubliée à la date initialement prévue et restera en ligne jusqu'à nouvel ordre.";
         }
 
         if(!$post->willBeUnpublished() && $post->willBePublished()){
-            $message = "Votre publication sera publiée le " . $post->getDatePublication()->format("d/m/Y à H\hi"). " et restera en ligne jusqu'à nouvel ordre";
+            $message = "Votre publication " . $visibilite . " " . $post->getTitle() . " sera publiée le " . $post->getDatePublication()->format("d/m/Y à H\hi"). " et restera en ligne jusqu'à nouvel ordre.";
         }
 
-        $message .= ".";
+        if(!$post->getDatePeremption()){
+            $message = "Votre publication " . $visibilite . " " . $post->getTitle() . " n'a plus de date de dépublication.";
+        }
 
         // add a flash message
         $this->addFlash('success', $message);
