@@ -347,6 +347,15 @@ class Post
         }
     }
 
+    public function hasBeenUnpublished(){
+        $now = new \DateTime();
+        if($this->datePeremption && $this->datePeremption < $now){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
     public function isDraft(){
         $now = new \DateTime();
         return (!$this->datePublication ? true : false);
