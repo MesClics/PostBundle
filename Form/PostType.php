@@ -49,6 +49,7 @@ class PostType extends AbstractType
                 'privé' => 'private'
             )
         ))
+        // TODO: modify to use DTO not Entity
         ->add('collections_select', EntityType::class, array(
             'class' => 'MesClicsPostBundle:Collection',
             'query_builder' => function(CollectionRepository $repo){

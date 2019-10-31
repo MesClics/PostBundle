@@ -108,20 +108,17 @@ class PostController extends Controller
             if($post_form->isSubmitted() &&  $post_form->isValid()){
                 //map DTO to Post Entity + addAuthor
                 $post = new Post();
-                $post_form->getData()->mapTo($post);
+                $postDTO->mapTo($post);
                 $post->addAuthor($this->token_storage->getToken()->getUser());
 
                 $em->persist($post);
-                $em->flush();
 
-                // check if post is published
-                if($post->isPublished()){
-                    $publication_event = MesClicsPostPublicationEvent($post);
-                    $ed->dispatch("mesclics_post.publciation", $publication_event);
-                }
                 //dispatch a MesClicsPostCreationEvent :
                 $event = new MesClicsPostCreationEvent($post);
-                $ed->dispatch("mesclics_post.creation", $event);
+                $ed->dispatch(MesClicsPostEvents::CREATION, $event);
+
+                
+                $em->flush();
 
                 //redirect to the post page
                 $args = array(

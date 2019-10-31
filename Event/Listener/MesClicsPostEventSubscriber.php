@@ -46,10 +46,11 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
     }
 
     public function onCreation(MesClicsPostCreationEvent $event){
+        $post = $event->getPost();
         // add a flash message
         $message = $this->getCreationMessage($post);
-
         $this->addFlash('success', $message);
+
         // add as action to navigator
         $action = MesClicsPostActions::creation($post);
         $this->navigator->getUser()->getChronology()->addAction($action);
@@ -153,7 +154,6 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
     }
 
     private function getCreationMessage(Post $post){
-        $post = $event->getPost();
         switch ($post->getVisibilite()){
             case "public":
             $visibilite = "publique";
@@ -165,13 +165,13 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
         }
         
         if($post->isOnline()){
-            $message = "Votre nouvelle publication " . $visibilite . " a bien été publiée";
+            $message = "Votre nouvelle publication " . $visibilite . " " . $post->getTitle() . " a bien été publiée";
              if($post->willBeUnpublished()){
                  $message .= " et sera en ligne jusqu'au " . $post->getDatePeremption()->format('d/m/Y à H\hi');
              }
              $message .= ".";
         } else{
-            $message = "Votre publication " . $visibilite . " a bien été enregistrée";
+            $message = "Votre publication " . $visibilite . " " . $post->getTitle() . " a bien été enregistrée";
             if($post->isDraft()){
                 $message .= " en tant que brouillon";
             }
@@ -227,7 +227,7 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
 
         if($post->willBeUnpublished()){
             if($post->WillBePublished()){
-                $message = "Votre publication " . $visibilite . " " . $post->getTitle() . " sera mise en ligne le " . $post->getDatePublication()->format("d/m/Y à H\hi") . " et sera dépubliée le " . $post->getDatePeremption()->format("d/m/y à H\hi") . ".";
+                $message = "Votre publication " . $visibilite . " " . $post->getTitle() . " sera mise en ligne le " . $post->getDatePublication()->format("d/m/Y à H\hi") . " et sera dépubliée le " . $post->getDatePeremption()->format("d/m/Y à H\hi") . ".";
             } else{
                 $message = "Votre publication " . $visibilite . " " . $post->getTitle() . " sera dépubliée le " . $post->getDatePeremption()->format("d/m/Y à H\hi") . "."; 
             }

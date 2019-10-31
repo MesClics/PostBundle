@@ -11,15 +11,15 @@ use MesClics\UtilsBundle\DataTransportObject\Mapper\MappingArrayItem;
 use MesClics\UtilsBundle\DataTransportObject\DataTransportObjectToEntity;
 
 class PostDTO extends DataTransportObjectToEntity{
-    public $title;
-    public $content;
-    public $date_publication;
-    public $date_peremption;
-    public $visibilite;
-    public $collections_select;
+    private $title;
+    private $content;
+    private $date_publication;
+    private $date_peremption;
+    private $visibilite;
+    private $collections_select;
     private $newcollections;
     private $old_collections;
-    public $entity_manager;
+    private $entity_manager;
 
     public function __construct(EntityManagerInterface $em){
         parent::__construct();
@@ -28,11 +28,11 @@ class PostDTO extends DataTransportObjectToEntity{
     }
 
     public function getMappingArray(){
-        $title_mapping = new MappingArrayItem("title", "getTitle", "setTitle");
-        $content_mapping = new MappingArrayItem("content", "getContent", "setContent");
-        $date_publication_mapping = new MappingArrayItem("date_publication", "getDatePublication", "setDatePublication");
-        $date_peremption_mapping = new MappingArrayItem("date_peremption", "getDatePeremption", "setDatePeremption");
-        $visibilite_mapping = new MappingArrayItem("visibilite", "getVisibilite", "setVisibilite");
+        $title_mapping = new MappingArrayItem("title", array("getTitle", "setTitle"));
+        $content_mapping = new MappingArrayItem("content", array("getContent", "setContent"));
+        $date_publication_mapping = new MappingArrayItem("date_publication", array("getDatePublication", "setDatePublication"));
+        $date_peremption_mapping = new MappingArrayItem("date_peremption", array("getDatePeremption", "setDatePeremption"));
+        $visibilite_mapping = new MappingArrayItem("visibilite", array("getVisibilite", "setVisibilite"));
         
         $mapping_array = array(
             $title_mapping,
@@ -60,9 +60,11 @@ class PostDTO extends DataTransportObjectToEntity{
     public function beforeMappingTo(Post $entity){
 
         //add collections not already saved in database
-        foreach($this->collections_select as $collection){
-            if(!$entity->getCollections()->contains($collection)){
-                $entity->addCollection($collection);
+        if($this->getCollectionsSelect()){
+            foreach($this->getCollectionsSelect() as $collection){
+                if(!$entity->getCollections()->contains($collection)){
+                    $entity->addCollection($collection);
+                }
             }
         }
 
@@ -73,16 +75,68 @@ class PostDTO extends DataTransportObjectToEntity{
             }
         }
 
-        foreach($this->newcollections as $collection){
-            //on crée un nvl objet Collection dont l'attribut entité est défini à 'post'
-            $new_collec = new Collection('post');
-            //auquel on transmet les infos name et description du formulaire
-            $new_collec->setName($collection->getName());
-            $new_collec->setDescription($collection->getDescription());
-            //on persiste notre objet
-             $this->entity_manager->persist($new_collec);
-            //on ajoute la nouvelle collection à notre objet post
-            $entity->addCollection($new_collec);
+        if($this->getNewcollections()){
+            foreach($this->getNewcollections() as $collection){
+                //on crée un nvl objet Collection dont l'attribut entité est défini à 'post'
+                $new_collec = new Collection('post');
+                //auquel on transmet les infos name et description du formulaire
+                $new_collec->setName($collection->getName());
+                $new_collec->setDescription($collection->getDescription());
+                //on persiste notre objet
+                $this->entity_manager->persist($new_collec);
+                //on ajoute la nouvelle collection à notre objet post
+                $entity->addCollection($new_collec);
+            }
+        }
+    }
+
+    public function getTitle(){
+        return $this->title;
+    }
+    public function setTitle(string $title){
+        $this->title = $title;
+    }
+
+    public function getContent(){
+        return $this->content;
+    }
+    public function setContent(string $content = null){
+        if($content){
+            $this->content = $content;
+        }
+    }
+    
+    public function getDatePublication(){
+        return $this->date_publication;
+    }
+    public function setDatePublication(\DateTime $date = null){
+        if($date){
+            $this->date_publication = $date;
+        }
+    }
+
+    public function getDatePeremption(){
+        return $this->date_peremption;
+    }
+    public function setDatePeremption(\DateTime $date = null){
+        if($date){
+            $this->date_peremption = $date;
+        }
+    }
+
+    public function getVisibilite(){
+        return $this->visibilite;
+    }
+    public function setVisibilite(string $visibilite){
+        $this->visibilite = $visibilite;
+    }
+
+    public function getCollectionsSelect(){
+        return $this->collections_select;
+    }
+    public function setCollectionsSelect(array $collections = null){
+        if($collections){
+            $this->collections_select = $collections;
         }
     }
 
@@ -90,11 +144,17 @@ class PostDTO extends DataTransportObjectToEntity{
         return $this->newcollections;
     }
 
-    public function setNewcollections(array $collections){
-        $this->newcollections = $collections;
+    public function setNewcollections(array $collections = null){
+        if($collections){
+            $this->newcollections = $collections;
+        }
     }
 
     public function getOldCollections(){
         return $this->old_collections;
+    }
+
+    public function setOldCollections($collections){
+        $this->old_collections = $collections;
     }
 }
