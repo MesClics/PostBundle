@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use MesClics\PostBundle\Form\DTO\PostDTO;
 use Symfony\Component\HttpFoundation\Request;
 use MesClics\PostBundle\Event\MesClicsPostEvents;
+use MesClics\NavigationBundle\Navigator\Navigator;
 use MesClics\PostBundle\PostRetriever\PostRetriever;
 use MesClics\PostBundle\Event\MesClicsPostUpdateEvent;
 use MesClics\PostBundle\Event\MesClicsPostCreationEvent;
@@ -25,11 +26,29 @@ class PostController extends Controller
     private $post_retriever;
     private $form_manager;
     private $token_storage;
+    private $event_dispatcher;
+    private $entity_manager;
 
-    public function __construct(PostRetriever $post_retriever, PostFormManager $form_manager, TokenStorageInterface $token_storage){
+    public const DELETE_POPUP = array(
+        'options' => array(
+            'illustration' => array(
+                'url' => '@mesclicspostbundle/images/icones/publication-remove.svg',
+                'alt' => 'illustration de suppression de publication',
+                'title' => 'supprimer une publication',
+                'type' => 'svg',
+                'class' => 'post-remove'
+            ),
+            'class' => 'alert'
+        ),
+        'template' => 'MesClicsPostBundle:PopUps:post-delete-confirm.html.twig'
+    );
+
+    public function __construct(PostRetriever $post_retriever, PostFormManager $form_manager, TokenStorageInterface $token_storage, EventDispatcherInterface $ed, EntityManagerInterface $em){
         $this->post_retriever = $post_retriever;
         $this->form_manager = $form_manager;
         $this->token_storage = $token_storage;
+        $this->event_dispatcher = $ed;
+        $this->entity_manager = $em;
     }
     
     public function initializePostRetriever(Request $request){        
@@ -72,11 +91,21 @@ class PostController extends Controller
     /**
      * @Security("has_role('ROLE_EDITOR')")
      */
-    public function postsAction(Request $request){
+    public function postsAction(Request $request, EntityManagerInterface $em){
+        $popup = $request->query->get("popup") ;
         $args = array(
             'currentSection' => 'édition',
             'subSection' => 'posts'
         );
+
+        if($popup){
+            if($popup === "delete"){
+                $post = $request->query->get("post");
+                $post = $em->getRepository("MesClicsPostBundle:Post")->find($post);
+                $args["popups"]["delete"] = self::DELETE_POPUP;
+                $args["post"] = $post;
+            }
+        }
 
         //on récupère les posts
         $this->post_retriever = $this->initializePostRetriever($request);
@@ -142,7 +171,7 @@ class PostController extends Controller
      * @ParamConverter("post", options={"mapping":{"post_id": "id"}})
      * @Security("has_role('ROLE_WRITER')")
      */
-    public function updateAction(Post $post, Request $request, EventDispatcherInterface $ed, EntityManagerInterface $em){
+    public function updateAction(Post $post, array $args = null, Request $request, EventDispatcherInterface $ed, EntityManagerInterface $em){
         //on vérifie que l'utilisateur courant fasse bien partie des auteurs de la publication
         $user = $this->token_storage->getToken()->getUser();
         if(!$post->getAuthors()->contains($user)){
@@ -196,7 +225,27 @@ class PostController extends Controller
         return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
     }
 
-    public function removeAction(Post $post){
+    /**
+     * @ParamConverter("post", options={"mapping":{"post_id": "id"}})
+     */
+    public function removeAction(Post $post, Navigator $navigator, Request $request, Response $response){
+        $popup = $request->query->get('confirm');
+        $coming_from = array_reverse($navigator->getVisitedRoutes()->toArray())[1];
 
+        //if deleting has to be confirmed
+        if($popup){
+            $args = self::DELETE_POPUP;
+            $args["post"] = $post;
+            $template = $this->render("MesClicsPostBundle:PopUps:post-delete-confirm.html.twig", $args);
+            
+            return $this->redirectToRoute($coming_from->getRoute(), array("popup"=> "delete", "post"=> $post->getId()));
+        } else{
+            $this->em->remove($post);
+            $event = MesClicsPostEvents::REMOVAL;
+            $this->ed->dispatch($event, $post);
+        }
+
+        $this->em->flush();
+        return $this->redirectToRoute("mesclics_admin_posts");
     }
 }
