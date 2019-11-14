@@ -1,0 +1,12 @@
+{% extends "MesClicsBundle:Popups:layout.html.twig" %}
+{% block popupHeader %}
+<h2>Attention !</h2>
+{% endblock popupHeader %}
+
+{% block popupContent %}
+<p class="oocss-instruction oocss-block oocss-full-container-width oocss-center-h">Êtes-vous sûr de vouloir supprimer la publication "{{ post.title }}" ?</p>
+<div class="oocss-center-h">
+    <a class="oocss-button oocss-discret" href="{{ path('mesclics_admin_post_delete', {'post_id': post.id}) }}" title="confirmer la suppression">Oui</a>
+    <button class="oocss-button oocss-discret oocss-close" data-target-class="popup">Annuler</button>
+</div>
+{% endblock popupContent %}

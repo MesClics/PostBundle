@@ -10,33 +10,15 @@
 
     <div class="oocss-form-fieldset oocss-vertical">
         {{ form_row(post_form.collections_select, {'attr': {'class': 'oocss-full-container-width'}, 'label': 'associer à une collection', 'help': 'sélectionner une ou plusieurs collections existantes et/ou en créer de nouvelles'}) }}
-        {#<div class="oocss-js-dynamic-target oocss-js-dynamic-template" data-prototype='{% with {'collection_form': post_form.newcollections} %}{% include "MesClicsPostBundle:Widgets:collection-embedded-form.html.twig" %}{% endwith %}'>
-        </div>#}
-        {#
-        {% set nameInputOptions = {'label': 'nom de la nouvelle collection', 'widget_attr': {'class': 'oocss-full-container-width'}, 'help': 'choisir un nom unique et facilement identifiable pour la collection'} %}
-        {% set descriptionInputOptions = {'label': 'description de la nouvelle collection', 'help': 'expliquer plus en détails à quoi cette collection correspond', 'widget_attr': {'class': 'oocss-full-container-width'}} %}
-        {% set prototypeChildrenOptions = {'name': nameInputOptions, 'description': descriptionInputOptions} %}
-
-            <div class="oocss-form-row ooccs-full-container-width oocss-js-dynamic-target oocss-js-dynamic-template" data-prototype="
-            {% filter escape %}
-                {{ include('MesClicsPostBundle:Widgets:collection-embedded-form.html.twig', { 'form': post_form.newcollections.vars.prototype }) }}
-            {% endfilter %}
-        ">
-        {% if post_form.newcollections.label is defined %}
-        <label class="oocss-label test">{{ post_form.newcollections.label }}</label>
-        {% endif %}
-        </div>
-        <button class="oocss-button oocss-button-rounded oocss-discret oocss-js-dynamic-button" title="ajouter une collection">+</button>
-        #}
        {{ form_row(post_form.newcollections, {'attr': {'class': 'oocss-full-container-width'}, 'label': 'ajouter une collection', 'button': {'title': 'ajouter une collection', 'label': '+'}}) }}
-        {# <div class="oocss-js-dynamic-target oocss-js-dynamic-template" data-prototype='{{ form_widget(post_form.newcollections.vars.prototype)|e('html_attr') }}'></div> #}
     </div>
-
-   {# <div class="oocss-form-fieldset oocss-vertical">
-        <div class="oocss-js-dynamic-target oocss-js-dynamic-template" data-prototype='{{ form_widget(post_form.tests.vars.prototype)|e('html_attr') }}'></div>
-        <button class="oocss-button oocss-button-rounded oocss-discret oocss-js-dynamic-button" title="créer un formulaire test">+</button>
-    </div> #}
+    <div class="oocss-form-fieldset oocss-horizontal">
         {{ form_row(post_form.submit, {'label': submit_label, 'attr': {'class': submit_class|default("")}}) }}
+        <a class="oocss-button oocss-discret oocss-table-data-icon"
+            href={{ path('mesclics_admin_post_remove', {'post_id': currentPost.id}) }} title="supprimer la publication">
+            Supprimer la publication
+        </a>
+    </div>
     {{ form_row(post_form._token) }}
 {{ form_end(post_form, {'render_rest': false}) }}
 

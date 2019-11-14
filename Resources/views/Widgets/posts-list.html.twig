@@ -74,7 +74,7 @@
                 </tr>
             
                 {% for post in posts %}
-                    <tr class="oocss-table-row oocss-clickable-table-row oocss-filterable {% for filter in post.filters %}{{ filter }}{% if not loop|last %} {% endif %}{% endfor %}">
+                    <tr class="oocss-table-row oocss-clickable-table-row oocss-filterable {% for filter in post.filters %}{{ filter }}{% if not loop|last %} {% endif %}{% endfor %}" data-link="{{ path('mesclics_admin_post', { 'post_id': post.id }) }}">
                         <td class="oocss-table-data discret oocss-table-data__s__horizontal">
                             {% for filter in post.filters %}
                                 {% if filter is same as ('publicPost') or ('privatePost') %}
@@ -88,8 +88,7 @@
                             {{ post.dateCreation | date('d/m/y') }} à {{ post.dateCreation | date('H:i') }}
                         </td>
                         <td class="oocss-table-data">
-                            <a class="[ oocss-table-link ]"
-                                href="{{ path('mesclics_admin_post', { 'post_id': post.id }) }}">{{ post.title }}</a>
+                            {{ post.title }}
                         </td>
                         <td class="oocss-table-data">
                             {% if post.datePublication is not null %}
@@ -105,6 +104,11 @@
                             -
                             {% endif %}
                         </td>
+                        <td class="oocss-table-data ">
+                            <button class="oocss-input-button oocss-discret oocss-table-data-icon oocss-open-popup" title="supprimer la publication" data-popup-path= {{ absolute_url(path('mesclics_admin_post_remove', { 'post_id': post.id })) }}>
+                                {{ source('@mesclicsbundle/images/svg/trash.svg') }}
+                            </button>
+                        </td>
                     </tr>
                 {% endfor %}
             </table>
@@ -114,6 +118,7 @@
         </div>
     </section>
 {% else %}
+{# TODO: widget infors sur les publications sur le modele des projets et contrats EspaceClientBundle #}
     {% set alert_message = 'Vous n\'avez encore aucune publication à votre nom.' %}
     {% if alert_message is defined %}
         <p class="[ oocss-block oocss-vertical oocss-center-all ]">

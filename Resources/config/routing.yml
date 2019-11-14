@@ -9,11 +9,22 @@ mesclics_admin_posts_new:
     path: publications/new/
     defaults:
         _controller: MesClicsPostBundle:Post:new
+        
+mesclics_admin_post_remove:
+    path: publications/{post_id}/remove
+    defaults:
+        _controller: MesClicsPostBundle:Post:remove
+
+mesclics_admin_post_delete:
+    path: publication/{post_id}/delete
+    defaults:
+        _controller: MesClicsPostBundle:Post:delete
 
 mesclics_admin_post:
     path: publications/{post_id}/
     defaults:
         _controller: MesClicsPostBundle:Post:update
+
         
 #COLLECTIONS
 mesclics_admin_collections:

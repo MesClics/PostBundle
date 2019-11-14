@@ -39,6 +39,11 @@ class MesClicsPostActions{
 
     public static function removal(Post $post){
         $label = "suppression de la publication " . $post->getTitle() . ".";
+        $objects = array(
+            "post" => $post
+        );
+
+        return new Action($label, $objects);
     }
 
 }

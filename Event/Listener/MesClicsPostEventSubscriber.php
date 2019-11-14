@@ -76,7 +76,7 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
         // add a flash message
         $this->addFlash('success', 'Votre publication ' . $event->getPost()->getTitle() . ' a bien été supprimée.');
         // add as action to navigator
-        $action = MesClicsPostActions::removal($post);
+        $action = MesClicsPostActions::removal($event->getPost());
         $this->navigator->getUser()->getChronology()->addAction($action);
     }
 

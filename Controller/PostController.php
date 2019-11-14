@@ -7,10 +7,14 @@ use MesClics\PostBundle\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
 use MesClics\PostBundle\Form\DTO\PostDTO;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use MesClics\PostBundle\Event\MesClicsPostEvents;
 use MesClics\NavigationBundle\Navigator\Navigator;
+use MesClics\PostBundle\Popups\MesClicsPostPopups;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use MesClics\PostBundle\PostRetriever\PostRetriever;
 use MesClics\PostBundle\Event\MesClicsPostUpdateEvent;
+use MesClics\PostBundle\Event\MesClicsPostRemovalEvent;
 use MesClics\PostBundle\Event\MesClicsPostCreationEvent;
 use MesClics\PostBundle\Form\FormManager\PostFormManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,6 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class PostController extends Controller
@@ -28,20 +33,6 @@ class PostController extends Controller
     private $token_storage;
     private $event_dispatcher;
     private $entity_manager;
-
-    public const DELETE_POPUP = array(
-        'options' => array(
-            'illustration' => array(
-                'url' => '@mesclicspostbundle/images/icones/publication-remove.svg',
-                'alt' => 'illustration de suppression de publication',
-                'title' => 'supprimer une publication',
-                'type' => 'svg',
-                'class' => 'post-remove'
-            ),
-            'class' => 'alert'
-        ),
-        'template' => 'MesClicsPostBundle:PopUps:post-delete-confirm.html.twig'
-    );
 
     public function __construct(PostRetriever $post_retriever, PostFormManager $form_manager, TokenStorageInterface $token_storage, EventDispatcherInterface $ed, EntityManagerInterface $em){
         $this->post_retriever = $post_retriever;
@@ -91,21 +82,11 @@ class PostController extends Controller
     /**
      * @Security("has_role('ROLE_EDITOR')")
      */
-    public function postsAction(Request $request, EntityManagerInterface $em){
-        $popup = $request->query->get("popup") ;
+    public function postsAction(Array $sub_args = null, Request $request){
         $args = array(
             'currentSection' => 'édition',
             'subSection' => 'posts'
         );
-
-        if($popup){
-            if($popup === "delete"){
-                $post = $request->query->get("post");
-                $post = $em->getRepository("MesClicsPostBundle:Post")->find($post);
-                $args["popups"]["delete"] = self::DELETE_POPUP;
-                $args["post"] = $post;
-            }
-        }
 
         //on récupère les posts
         $this->post_retriever = $this->initializePostRetriever($request);
@@ -114,10 +95,15 @@ class PostController extends Controller
             'order_by' => $this->post_retriever->getOrderBy(),
             'sort' => $this->post_retriever->getOrder()
         );
-                        
+
         $posts = $this->post_retriever->getPosts();
         if($posts){
             $args['posts'] = $posts;
+        }
+
+        //on ajoute les sub_args (popups si nécessaire)
+        if($sub_args){
+            $args = array_merge($args, $sub_args);
         }
 
         return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
@@ -126,9 +112,9 @@ class PostController extends Controller
     /**
      * @Security("has_role('ROLE_WRITER')")
      */
-    public function newAction(Request $request, EventDispatcherInterface $ed, EntityManagerInterface $em){
+    public function newAction(Request $request){
         //on génère un formulaire pour la création d'uun nouveau post.
-        $postDTO = new PostDTO($em);
+        $postDTO = new PostDTO($this->entity_manager);
         $post_form = $this->createForm(PostType::class, $postDTO);
 
         //on traite éventuellement le formulaire
@@ -140,14 +126,14 @@ class PostController extends Controller
                 $postDTO->mapTo($post);
                 $post->addAuthor($this->token_storage->getToken()->getUser());
 
-                $em->persist($post);
+                $this->entity_manager->persist($post);
 
                 //dispatch a MesClicsPostCreationEvent :
                 $event = new MesClicsPostCreationEvent($post);
-                $ed->dispatch(MesClicsPostEvents::CREATION, $event);
+                $this->event_dispatcher->dispatch(MesClicsPostEvents::CREATION, $event);
 
                 
-                $em->flush();
+                $this->entity_manager->flush();
 
                 //redirect to the post page
                 $args = array(
@@ -171,18 +157,19 @@ class PostController extends Controller
      * @ParamConverter("post", options={"mapping":{"post_id": "id"}})
      * @Security("has_role('ROLE_WRITER')")
      */
-    public function updateAction(Post $post, array $args = null, Request $request, EventDispatcherInterface $ed, EntityManagerInterface $em){
+    public function updateAction(Post $post, array $sub_args = null, Request $request){
         //on vérifie que l'utilisateur courant fasse bien partie des auteurs de la publication
         $user = $this->token_storage->getToken()->getUser();
         if(!$post->getAuthors()->contains($user)){
             throw new AccessDeniedException('Seuls les auteurs de la publication peuvent la modifier');
         }
+
         //on crée un formulaire avec le post courant comme ref
-        $postDTO = new PostDTO($em);
+        $postDTO = new PostDTO($this->entity_manager);
         $postDTO->mapFrom($post);
 
         $form = $this->createForm(PostType::class, $postDTO);
-        
+
         //on traite éventuellement le formulaire si la requête est de type post
         if($request->isMethod('POST')){
             $form->handleRequest($request);
@@ -198,16 +185,16 @@ class PostController extends Controller
                 if($post_dto->getUpdatedDatas()){
                     //dispatch MesClicsPostUpdateEvent
                     $event = new MesClicsPostUpdateEvent($before_update, $post);
-                    $ed->dispatch(MesClicsPostEvents::UPDATE, $event);
+                    $this->event_dispatcher->dispatch(MesClicsPostEvents::UPDATE, $event);
 
                     // dispatch MesClicsPostCategorizationEvent if needed
                     if($post_dto->getUpdatedData("collections")){
                         $cat_event = new MesClicsPostCategorizationEvent($post_dto->getUpdatedData("collections")[0], $post_dto->getUpdatedData("collections")[1], $post);
-                        $ed->dispatch(MesClicsPostEvents::CATEGORIZATION, $cat_event);
+                        $this->event_dispatcher->dispatch(MesClicsPostEvents::CATEGORIZATION, $cat_event);
                     }
                 }
                 
-                $em->flush();
+                $this->entity_manager->flush();
 
                 $args['post_id'] = $post->getID();
                 return $this->redirectToRoute("mesclics_admin_post", $args);
@@ -222,30 +209,44 @@ class PostController extends Controller
             'currentPost' => $post
         );
 
+        //on ajoute les sub_args (popups si nécessaire)
+        if($sub_args){
+            $args = array_merge($args, $sub_args);
+        }
+
         return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
+    }
+
+
+    /**
+     * @ParamConverter("post", options={"mapping":{"post_id": "id"}})
+     */
+    public function deleteAction(Post $post){
+        // fire error if user is not among the authors
+        if(!$post->getAuthors()->contains($this->getUser())){
+            return new AccessDeniedHttpException("Désolé, seuls les auteurs d'une publication peuvent la supprimer!");
+        }
+
+        $this->entity_manager->remove($post);
+        $event = new MesClicsPostRemovalEvent($post);
+        $this->event_dispatcher->dispatch(MesClicsPostEvents::REMOVAL, $event);
+
+        $this->entity_manager->flush();
+        return $this->redirectToRoute("mesclics_admin_posts");
     }
 
     /**
      * @ParamConverter("post", options={"mapping":{"post_id": "id"}})
      */
-    public function removeAction(Post $post, Navigator $navigator, Request $request, Response $response){
-        $popup = $request->query->get('confirm');
-        $coming_from = array_reverse($navigator->getVisitedRoutes()->toArray())[1];
+    public function removeAction(Post $post){
+        $popups = array();
+        MesClicsPostPopups::onDelete($popups);
+        $args = array(
+            "popups" => $popups,
+            "post" => $post
+        );
 
-        //if deleting has to be confirmed
-        if($popup){
-            $args = self::DELETE_POPUP;
-            $args["post"] = $post;
-            $template = $this->render("MesClicsPostBundle:PopUps:post-delete-confirm.html.twig", $args);
-            
-            return $this->redirectToRoute($coming_from->getRoute(), array("popup"=> "delete", "post"=> $post->getId()));
-        } else{
-            $this->em->remove($post);
-            $event = MesClicsPostEvents::REMOVAL;
-            $this->ed->dispatch($event, $post);
-        }
-
-        $this->em->flush();
-        return $this->redirectToRoute("mesclics_admin_posts");
+        $popup = $this->render("MesClicsBundle:PopUps:renderer.html.twig", $args);
+        return $popup;
     }
 }
