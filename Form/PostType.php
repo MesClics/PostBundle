@@ -80,7 +80,6 @@ class PostType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            // 'data_class' => 'MesClics\PostBundle\Entity\Post',
             'data_class' => PostDTO::class
         ));
     }
