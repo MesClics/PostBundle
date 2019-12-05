@@ -53,7 +53,7 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
 
         // add as action to navigator
         $action = MesClicsPostActions::creation($post);
-        $this->navigator->getUser()->getChronology()->addAction($action);
+       $this->navigator->addAction($action);
     }
 
     public function onUpdate(MesClicsPostUpdateEvent $event){
@@ -69,7 +69,7 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
 
         // add as action to navigator
         $action = MesClicsPostActions::update($afterUpdate);
-        $this->navigator->getUser()->getChronology()->addAction($action);
+       $this->navigator->addAction($action);
     }
 
     public function onRemoval(MesClicsPostRemovalEvent $event){
@@ -77,7 +77,7 @@ class MesClicsPostEventSubscriber implements  EventSubscriberInterface{
         $this->addFlash('success', 'Votre publication ' . $event->getPost()->getTitle() . ' a bien été supprimée.');
         // add as action to navigator
         $action = MesClicsPostActions::removal($event->getPost());
-        $this->navigator->getUser()->getChronology()->addAction($action);
+       $this->navigator->addAction($action);
     }
 
     public function onPublication(MesClicsPostPublicationEvent $event){
