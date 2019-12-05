@@ -14,10 +14,12 @@
     </div>
     <div class="oocss-form-fieldset oocss-horizontal">
         {{ form_row(post_form.submit, {'label': submit_label, 'attr': {'class': submit_class|default("")}}) }}
-        <a class="oocss-button oocss-discret oocss-table-data-icon"
-            href={{ path('mesclics_admin_post_remove', {'post_id': currentPost.id}) }} title="supprimer la publication">
-            Supprimer la publication
-        </a>
+        <div class="oocss-form-row oocss-justify-end">
+            <button class="oocss-button oocss-open-popup oocss-headed-block oocss-discret oocss-horizontal oocss-s publication-remove"
+                href={{ path('mesclics_admin_post_remove', {'post_id': currentPost.id}) }} title="supprimer la publication">
+                Supprimer la publication
+            </button>
+        </div>
     </div>
     {{ form_row(post_form._token) }}
 {{ form_end(post_form, {'render_rest': false}) }}
