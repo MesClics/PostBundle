@@ -5,20 +5,20 @@
      </div>
 
      <div class="oocss-widget--content">
-          <table class="oocss-table oocss-full-container-width">
-               <thead class="oocss-table-head-row">
-                    <th>type d'objet</th>
-                    <th>nom</th>
-                    <th>description</th>
-               </thead>
+          <div class="oocss-table oocss-full-container-width">
+               <div class="oocss-table-head-row">
+                    <span class="oocss-table-head">type d'objet</span>
+                    <span class="oocss-table-head" data-column-width="2fr">nom</span>
+                    <span class="oocss-table-head">description</span>
+               </div>
 
                {% for collection in collections %}
-               <tr class="oocss-table-row oocss-clickable-table-row">
-                    <td class="oocss-table-data">{{ collection.entity }}</td>
-                    <td class="oocss-table-data"><a href="{{ path('mesclics_admin_collection', {'collection_id': collection.id }) }}" title="voir la collection">{{ collection.name }}</a></td>
-                    <td class="oocss-table-data">{{ collection.description }}</td>
-               </tr>
+               <div class="oocss-table-row oocss-clickable-table-row">
+                    <span class="oocss-table-data">{{ collection.entity }}</span>
+                    <span class="oocss-table-data"><a href="{{ path('mesclics_admin_collection', {'collection_id': collection.id }) }}" title="voir la collection">{{ collection.name }}</a></span>
+                    <span class="oocss-table-data">{{ collection.description }}</span>
+               </div>
                {% endfor %}
-          </table>
+          </div>
      </div>
 </section>

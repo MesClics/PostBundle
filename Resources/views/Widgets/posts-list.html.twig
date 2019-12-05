@@ -11,13 +11,13 @@
         </div>
         <div class="oocss-widget--content">
             <div class="oocss-widget--content-zone">
-                <ul class="oocss-block oocss-horizontal oocss-center-h oocss-legend oocss-legend__d__list oocss-legend__s__horizontal oocss-filters posts-filters" data-filters-title= "h3/filtrer par statut" data-filters="class:onlinePost/name:en ligne|class:onlineWithPeremptionPost/name:en ligne avec date de péremption|class:toBePublishedPost/name:publié prochainement|class:unpublishedPost/name:dépublié|name:brouillon/class:draftPost" data-filters-target-class="posts-filters-target">
+                <ul class="oocss-block oocss-horizontal oocss-center-h oocss-legend oocss-legend__d__list oocss-legend oocss-filters posts-filters" data-filters-title= "h3/filtrer par statut" data-filters="class:onlinePost/name:en ligne|class:onlineWithPeremptionPost/name:en ligne avec date de péremption|class:toBePublishedPost/name:publié prochainement|class:unpublishedPost/name:dépublié|name:brouillon/class:draftPost" data-filters-target-class="posts-filters-target">
                     <button class="oocss-filters-button oocss-legend--item">
                         <span class="oocss-index oocss-filters-button-class"></span>
                         <span data-filters-button-textContent></span>
                     </button>
                 </ul>
-                <ul class="oocss-block oocss-horizontal oocss-center-h oocss-legend oocss-legend__d__list oocss-legend__s__horizontal oocss-filters posts-filters" data-filters-title="h3/filtrer par visibilité" data-filters="class:publicPost/name:public|class:privatePost/name:privé" data-filters-target-class="posts-filters-target">
+                <ul class="oocss-block oocss-horizontal oocss-center-h oocss-legend oocss-legend__d__list oocss-legend oocss-filters posts-filters" data-filters-title="h3/filtrer par visibilité" data-filters="class:publicPost/name:public|class:privatePost/name:privé" data-filters-target-class="posts-filters-target">
                     <button class="oocss-filters-button oocss-legend--item">
                         <span class="oocss-index oocss-icon oocss-filters-button-class"></span>
                         <span data-filters-button-textContent></span>
@@ -25,57 +25,69 @@
                 </ul>
             </div>
 
-            <table class="oocss-table oocss-full-container-width posts-filters-target">
-                <tr class="oocsss-table-head-row">
-                    <th></th>
+            <div class="oocss-table oocss-full-container-width posts-filters-target">
+                <div class="oocss-table-head-row">
+                    {# STATUT #}
+                    <span class="oocss-table-head"></span>
+
                     {# DATE DE CREATION #}
-                    <th class="none-on-small-screens">
+                    <span class="oocss-table-head none-on-small-screens">
                         {% if sort_params.order_by is not defined or sort_params.order_by is same as ('date-creation') %}
-                            {% set sort_param = sort_param_inv %}
+                        {% set sort_param = sort_param_inv %}
                         {% else %}
-                            {% set sort_param = 'ASC' %}
+                        {% set sort_param = 'ASC' %}
                         {% endif %}
 
                         <a href="{{ path('mesclics_admin_posts', {'order-by': 'date-creation', 'sort': sort_param }) }}"
                             class="[ oocss-table-col-sort {% if sort_params.order_by is not defined or sort_params.order_by is same as ('date-creation') %}oocss-active {% endif %}] sort-{{ sort_params.sort|default('asc') }}">créée
                             le</a>
-                    </th>
+                    </span>
+
                     {# TITRE DU POST #}
-                    <th>
+                    <span class="oocss-table-head" data-column-width="2fr">
                         {% if sort_params.order_by is defined and sort_params.order_by is same as ('titre') %}
-                            {% set sort_param = sort_param_inv %}
+                        {% set sort_param = sort_param_inv %}
                         {% else %}
-                            {% set sort_param = 'ASC' %}
+                        {% set sort_param = 'ASC' %}
                         {% endif %}
 
                         <a href="{{ path('mesclics_admin_posts', {'order-by': 'titre', 'sort': sort_param }) }}"
                             class="[ oocss-table-col-sort ] sort-{{ sort_params.sort|default('asc') }} {% if sort_params.order_by is defined and sort_params.order_by is same as ('titre') %}oocss-active {% endif %}">titre</a>
-                    </th>
+                    </span>
+
                     {# DATE DE PUBLICATION #}
-                    <th>
+                    <span class="oocss-table-head">
                         {% if sort_params.order_by is defined and sort_params.order_by is same as ('date-publication-debut') %}
-                            {% set sort_param = sort_param_inv %}
+                        {% set sort_param = sort_param_inv %}
                         {% else %}
-                            {% set sort_param = 'DESC' %}
+                        {% set sort_param = 'DESC' %}
                         {% endif %}
 
-                        <a href="{{ path('mesclics_admin_posts', {'order-by': 'date-publication-debut', 'sort': sort_param }) }}" class="[ oocss-table-col-sort ] sort-{{ sort_params.sort|default('desc') }} {% if sort_params.order_by is defined and sort_params.order_by is same as ('date-publication-debut') %}oocss-active {% endif %}">publiée le</a>
-                    </th>
-                    {# DATE DE PEREMPTION #}
-                    <th>
-                        {% if sort_params.order_by is defined and sort_params.order_by is same as ('date-publication-fin') %}
-                            {% set sort_param = sort_param_inv %}
-                        {% else %}
-                            {% set sort_param = 'DESC' %}
-                        {% endif %}
-                        <a href="{{ path('mesclics_admin_posts', {'order-by': 'date-publication-fin', 'sort': sort_param }) }}" class="[ oocss-table-col-sort  {% if sort_params.order_by is defined and sort_params.order_by is same as ('date-publication-fin') %}oocss-active {% endif %}] sort-{{ sort_params.sort|default('asc') }}">dépubliée
+                        <a href="{{ path('mesclics_admin_posts', {'order-by': 'date-publication-debut', 'sort': sort_param }) }}"
+                            class="[ oocss-table-col-sort ] sort-{{ sort_params.sort|default('desc') }} {% if sort_params.order_by is defined and sort_params.order_by is same as ('date-publication-debut') %}oocss-active {% endif %}">publiée
                             le</a>
-                    </th>
-                </tr>
-            
-                {% for post in posts %}
-                    <tr class="oocss-table-row oocss-clickable-table-row oocss-filterable {% for filter in post.filters %}{{ filter }}{% if not loop|last %} {% endif %}{% endfor %}" data-link="{{ path('mesclics_admin_post', { 'post_id': post.id }) }}">
-                        <td class="oocss-table-data discret oocss-table-data__s__horizontal">
+                    </span>
+
+                    {# DATE DE PEREMPTION #}
+                    <span class="oocss-table-head">
+                        {% if sort_params.order_by is defined and sort_params.order_by is same as ('date-publication-fin') %}
+                        {% set sort_param = sort_param_inv %}
+                        {% else %}
+                        {% set sort_param = 'DESC' %}
+                        {% endif %}
+                        <a href="{{ path('mesclics_admin_posts', {'order-by': 'date-publication-fin', 'sort': sort_param }) }}"
+                            class="[ oocss-table-col-sort  {% if sort_params.order_by is defined and sort_params.order_by is same as ('date-publication-fin') %}oocss-active {% endif %}] sort-{{ sort_params.sort|default('asc') }}">dépubliée
+                            le</a>
+                    </span>
+
+                    {# SUPPRIMER #}
+                    <span class="oocss-table-head"></span>
+                    </div>
+
+                    {% for post in posts %}
+                        <div class="oocss-table-row oocss-full-container-width oocss-clickable-table-row oocss-filterable {% for filter in post.filters %}{{ filter }}{% if not loop|last %} {% endif %}{% endfor %}" data-link="{{ path('mesclics_admin_post', { 'post_id': post.id }) }}">
+                        {# STATUT #}
+                        <span class="oocss-table-data discret oocss-table-data oocss-horizontal">
                             {% for filter in post.filters %}
                                 {% if filter is same as ('publicPost') or ('privatePost') %}
                                     <span class="oocss-index oocss-icone {{ filter }}"></span>
@@ -83,36 +95,50 @@
                                     <span class="oocss-index {{ filter }}"></span>
                                 {% endif %}
                             {% endfor %}
-                        </td>
-                        <td class="oocss-table-data none-on-small-screens">
-                            {{ post.dateCreation | date('d/m/y') }} à {{ post.dateCreation | date('H:i') }}
-                        </td>
-                        <td class="oocss-table-data">
+                        </span>
+                        
+                        {# DATE CREATION #}
+                        <span class="oocss-table-data none-on-small-screens">
+                            {{ post.dateCreation | date('d/m/y') }} <span class="none-on-small-screens">à
+                                {{ post.dateCreation | date('H:i') }}</span>
+                        </span>
+
+                        {# TITRE #}
+                        <span class="oocss-table-data">
                             {{ post.title }}
-                        </td>
-                        <td class="oocss-table-data">
+                        </span>
+
+                        {# DATE PUBLICATION #}
+                        <span class="oocss-table-data">
                             {% if post.datePublication is not null %}
-                                {{ post.datePublication | date('d/m/y') }} <span class="none-on-small-screens">à {{ post.datePublication | date('H:i') }}</span>
+                            {{ post.datePublication | date('d/m/y') }} <span class="none-on-small-screens">à
+                                {{ post.datePublication | date('H:i') }}</span>
                             {% else %}
                             -
                             {% endif %}
-                        </td>
-                        <td class="oocss-table-data">
+                        </span>
+
+                        {# DATE DE PEREMPTION #}
+                        <span class="oocss-table-data">
                             {% if post.datePeremption is not null %}
-                            {{ post.datePeremption | date('d/m/y') }} <span class="none-on-small-screens">à {{ post.datePeremption | date('H:i') }}</span>
+                            {{ post.datePeremption | date('d/m/y') }} <span class="none-on-small-screens">à
+                                {{ post.datePeremption | date('H:i') }}</span>
                             {% else %}
                             -
                             {% endif %}
-                        </td>
-                        <td class="oocss-table-data ">
-                            <button class="oocss-input-button oocss-discret oocss-table-data-icon oocss-open-popup" title="supprimer la publication" data-popup-path= {{ absolute_url(path('mesclics_admin_post_remove', { 'post_id': post.id })) }}>
+                        </span>
+
+                        {# SUPPRIMER #}
+                        <span class="oocss-table-data ">
+                            <button class="oocss-input-button oocss-discret oocss-table-data-icon oocss-open-popup"
+                                title="supprimer la publication"
+                                data-popup-path={{ absolute_url(path('mesclics_admin_post_remove', { 'post_id': post.id })) }}>
                                 {{ source('@mesclicsbundle/images/svg/trash.svg') }}
                             </button>
-                        </td>
-                    </tr>
+                        </span>
+                    </div>    
                 {% endfor %}
-            </table>
-
+            </div>
 
 
         </div>
