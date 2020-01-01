@@ -1,0 +1,10 @@
+<svg width="64.73mm" height="64.73mm" version="1.1" viewBox="0 0 64.73 64.73" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(-6.1886 -71.111)">
+  <g transform="translate(-300.39 -163.81)">
+   <g transform="translate(381.48 285.89)" style="stroke:#000">
+    <rect x="-74.901" y="-50.97" width="64.73" height="64.73" style="fill:none;paint-order:stroke fill markers;stroke:none"/>
+   </g>
+   <path d="m343.91 247.08a1.323 1.323 0 0 0-0.51172 0.0918h-19.285a1.323 1.323 0 0 0-1.3242 1.3223v37.676a1.323 1.323 0 0 0 1.3242 1.3223h29.562a1.323 1.323 0 0 0 1.3242-1.3223v-26.986a1.323 1.323 0 0 0-0.29492-1.3965l-9.8555-10.285a1.323 1.323 0 0 0-0.93945-0.42188zm-18.475 2.7383h17.098l0.24414 8.8828a1.323 1.323 0 0 0 1.3066 1.2871l8.2695 0.0996v24.758h-26.918zm19.797 1.9062 5.457 5.6973-5.3027-0.0645zm-13.545 11.883a1.323 1.323 0 1 0-6e-3 2.6445l14.217 0.0371a1.3232 1.3232 0 1 0 6e-3 -2.6465zm0 4.0039a1.323 1.323 0 1 0-6e-3 2.6445l14.217 0.0371a1.3232 1.3232 0 1 0 6e-3 -2.6465zm0 4.084a1.323 1.323 0 1 0-6e-3 2.6445l14.217 0.0371a1.3232 1.3232 0 1 0 6e-3 -2.6465z" style="color-rendering:auto;color:#000000;dominant-baseline:auto;fill-rule:evenodd;fill:#f5f5f5;font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;image-rendering:auto;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-padding:0;shape-rendering:auto;solid-color:#000000;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+  </g>
+ </g>
+</svg>
