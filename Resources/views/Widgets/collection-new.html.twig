@@ -14,7 +14,7 @@
             <ul class="oocss-block oocss-horizontal">
                 {% for collection in collections %}
                     {% if collection.entity is same as (entityType) %}
-                        <li>
+                        <li class="oocss-block">
                             <a class="oocss-button oocss-discret"
                                 href="{{ path('mesclics_admin_collection', {'collection_id': collection.id}) }}"
                                 title="{{ collection.description }}">{{ collection.name }}</a>
