@@ -6,7 +6,7 @@ class MesClicsPostPopups{
         $popups['delete'] = array(
             'options' => array(
                 'illustration' => array(
-                    'url' => '@mesclicspostbundle/images/icones/publication-remove.svg',
+                    'url' => '@mesclicspostbundle/images/icones/svg/post-remove.svg',
                     'alt' => 'illustration de suppression de publication',
                     'title' => 'supprimer une publication',
                     'type' => 'svg',
