@@ -3,7 +3,9 @@
 namespace MesClics\PostBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use MesClics\CommentBundle\Entity\Comment;
 use Doctrine\Common\Collections\ArrayCollection;
+use MesClics\UtilsBundle\Functions\MesClicsFunctions;
 
 /**
  * Post
@@ -75,6 +77,12 @@ class Post
      * @ORM\JoinTable(name="mesclics_post_collection")
      */
     private $collections;
+
+    /**
+     * @ORM\ManyToMany(targetEntity = "MesClics\CommentBundle\Entity\Comment")
+     * @ORM\JoinTable(name="mesclics_post_backend_comments")
+     */
+    private $backend_comments;
 
     /**
      * Get id.
@@ -300,6 +308,33 @@ class Post
     {
         return $this->collections;
     }
+
+    /**
+     * Add a backup comment
+     * 
+     * @param Comment
+     * @return Post
+     */
+     public function addBackendComment(Comment $comment){
+         $this->backend_comments->add($comment);
+         return $this;
+     }
+
+     /**
+      * Remove backup comment
+      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise
+      */
+      public function removeBackendComment(Comment $comment){
+          return $this->backend_comments->remove($comment);
+      }
+
+     /**
+      * Get backend_comments
+      * @return \Doctrine\Common\Collections\Collection
+      */
+      public function getBackendComments(){
+        return $this->backend_comments;
+      }
     
     public function __construct(){
         $this->authors = new ArrayCollection();
@@ -307,6 +342,7 @@ class Post
         foreach($this->getCollections() as $collection){
             $collection->setEntity('post');
         }
+        $this->backend_comments = new ArrayCollection();
         //on rend automatique la date de création
         $this->setDateCreation(new \DateTime());        
     }

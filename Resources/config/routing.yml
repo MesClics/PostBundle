@@ -20,6 +20,37 @@ mesclics_admin_post_delete:
     defaults:
         _controller: MesClicsPostBundle:Post:delete
 
+mesclics_admin_post_backend_comment:
+    path: publications/{post_id}/backup_comment_submission
+    defaults:
+        _controller: MesClicsPostBundle:BackendComment:create
+
+mesclics_admin_post_backend_comment_update:
+    path: publications/{post_id}/backend_comment/{comment_id}/update
+    defaults:
+        _controller: MesClicsPostBundle:BackendComment:update
+
+mesclics_admin_post_backend_comment_reply:
+    path: publications/{post_id}/backup_comment/{comment_id}/reply
+    defaults:
+        _controller: MesClicsPostBundle:BackendComment:reply
+
+mesclics_admin_post_backend_comment_remove:
+    path: publications/{post_id}/backup_comment/{comment_id}/remove
+    defaults:
+        _controller: MesClicsPostBundle:BackendComment:remove
+
+mesclics_admin_post_backend_comment_delete:
+    path: publications/{post_id}/backup_comment/{comment_id}/delete
+    defaults:
+        _controller: MesClicsPostBundle:BackendComment:delete
+
+mesclics_admin_post_backend_comment_pin:
+    path: publications/{post_id}/backup_comment/{comment_id}/pin
+    defaults:
+        _controller: MesClicsPostBundle:BackendComment:pin
+        
+
 mesclics_admin_post:
     path: publications/{post_id}/
     defaults:

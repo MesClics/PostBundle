@@ -1,0 +1,24 @@
+<section class="oocss-widget comment small highlight2">
+    <div class="oocss-widget--head">
+        <h2 class="oocss-widget--title">Commentaires d'édition</h2>
+    </div>
+    <div class="oocss-widget--content">
+
+        <!-- TODO: export into Comment separated widgets -->
+        {% if post.backendComments is not empty %}
+            <div class="oocss-block oocss-vertical comments">
+                {% set comments = post.backendComments|reverse %}
+                {% for comment in comments %}
+                    {% include "MesClicsPostBundle:Templates:backend-comment.html.twig" with {'comment': comment, 'post': post} %}
+                {% endfor %} 
+            </div>
+        {% else %}
+            <p class="oocss-instruction oocss-discret">Aucun commentaire d'édition n'a encore été posté pour cette publication</p>
+        {% endif %}
+
+        <div class="oocss-widget--zone">
+            <h3>Ajouter un commentaire</h3>
+            {% include "MesClicsCommentBundle:Forms:comment-form.html.twig" with {'form': form} %}
+        </div>
+    </div>
+</section>

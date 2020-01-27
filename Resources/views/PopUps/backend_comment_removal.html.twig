@@ -1,0 +1,19 @@
+{% extends "MesClicsBundle:Popups:layout.html.twig" %}
+{% block popupHeader %}
+    <h2>Attention !</h2>
+{% endblock popupHeader %}
+
+{% block popupContent %}
+    {% if (app.user) is same as (comment.author) %}
+        {% set message = "Êtes-vous sûr de vouloir supprimer le commentaire que vous avez publié le " ~ comment.updatedAt|date("d/m/Y \à H:i") ~ "?" %}
+    {% else %}
+        {% set message = "Êtes-vous sûr de vouloir supprimer le commentaire publié le " ~
+        comment.updatedAt|date("d/m/Y \à H:i") ~ " par " ~ comment.author.username ~ "?" %}
+    {% endif %}
+    <p class="oocss-instruction oocss-block oocss-full-container-width oocss-center-h">{{ message }}</p>
+    <div class="oocss-center-h">
+        <a class="oocss-button oocss-discret" href="{{ path('mesclics_admin_post_backend_comment_delete', {'post_id': post.id, "comment_id": comment.id}) }}"
+            title="confirmer la suppression">Oui</a>
+        <button class="oocss-button oocss-discret oocss-close" data-target-class="popup">Annuler</button>
+    </div>
+{% endblock popupContent %}
