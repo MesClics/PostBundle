@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use MesClics\PostBundle\Event\MesClicsPostEvents;
 use MesClics\PostBundle\Widget\PostUpdateWidgets;
 use MesClics\PostBundle\Popups\MesClicsPostPopups;
+use MesClics\PostBundle\Widget\PostCreationWidgets;
 use MesClics\PostBundle\PostRetriever\PostRetriever;
 use MesClics\PostBundle\Event\MesClicsPostRemovalEvent;
 use MesClics\PostBundle\Event\MesClicsPostCreationEvent;
@@ -108,44 +109,28 @@ class PostController extends Controller
     /**
      * @Security("has_role('ROLE_WRITER')")
      */
-    public function newAction(Request $request){
-        //on génère un formulaire pour la création d'uun nouveau post.
-        $postDTO = new PostDTO($this->entity_manager);
-        $post_form = $this->createForm(PostType::class, $postDTO);
+    public function newAction(PostCreationWidgets $widgets_container, Request $request){
+        $params = array(
+            'author' => $this->token_storage->getToken()->getUser()
+        );
+        $widgets_container->initialize($params);
 
         //on traite éventuellement le formulaire
         if($request->isMethod('POST')){
-            $post_form->handleRequest($request);
-            if($post_form->isSubmitted() &&  $post_form->isValid()){
-                //map DTO to Post Entity + addAuthor
-                $post = new Post();
-                $postDTO->mapTo($post);
-                $post->addAuthor($this->token_storage->getToken()->getUser());
-
-                $this->entity_manager->persist($post);
-
-                //dispatch a MesClicsPostCreationEvent :
-                $event = new MesClicsPostCreationEvent($post);
-                $this->event_dispatcher->dispatch(MesClicsPostEvents::CREATION, $event);
-
-                
-                $this->entity_manager->flush();
-
-                //redirect to the post page
-                $args = array(
-                    'post_id' => $post->getID()
-                );
-                return $this->redirectToRoute("mesclics_admin_post", $args);
-            }
+            $widgets_container->handleRequest($request);
+            //redirect to the post page
+            $args = array(
+                'post_id' => $widgets_container->getWidget('post_creation')->getPost()->getID()
+            );
+            return $this->redirectToRoute("mesclics_admin_post", $args);
         }
 
         $args = array(
             'currentSection' => 'edition',
             'subSection' => 'posts',
-            'postSection' => 'new',
-            'new_post_form' => $post_form->createView(),
+            'postSection' => 'edit',
+            'widgets' => $widgets_container->getWidgets()
         );
-
         return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
     }
 
