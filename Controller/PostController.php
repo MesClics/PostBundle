@@ -7,23 +7,19 @@ use MesClics\PostBundle\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
 use MesClics\PostBundle\Form\DTO\PostDTO;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use MesClics\PostBundle\Event\MesClicsPostEvents;
-use MesClics\NavigationBundle\Navigator\Navigator;
+use MesClics\PostBundle\Widget\PostUpdateWidgets;
 use MesClics\PostBundle\Popups\MesClicsPostPopups;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use MesClics\PostBundle\PostRetriever\PostRetriever;
-use MesClics\PostBundle\Event\MesClicsPostUpdateEvent;
 use MesClics\PostBundle\Event\MesClicsPostRemovalEvent;
 use MesClics\PostBundle\Event\MesClicsPostCreationEvent;
 use MesClics\PostBundle\Form\FormManager\PostFormManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use MesClics\PostBundle\Event\MesClicsPostCategorizationEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class PostController extends Controller
@@ -157,58 +153,35 @@ class PostController extends Controller
      * @ParamConverter("post", options={"mapping":{"post_id": "id"}})
      * @Security("has_role('ROLE_WRITER')")
      */
-    public function updateAction(Post $post, array $sub_args = null, Request $request){
+    public function updateAction(Post $post, array $sub_args = null, PostUpdateWidgets $widgets_container, Request $request){
         //on vérifie que l'utilisateur courant fasse bien partie des auteurs de la publication
         $user = $this->token_storage->getToken()->getUser();
         if(!$post->getAuthors()->contains($user)){
             throw new AccessDeniedException('Seuls les auteurs de la publication peuvent la modifier');
         }
 
-        //on crée un formulaire avec le post courant comme ref
-        $postDTO = new PostDTO($this->entity_manager);
-        $postDTO->mapFrom($post);
+        //sets the $post and the $user widgets_container attrs and initialize widgets if needed;
+        $widgets_vars = array(
+            'post' => $post,
+            'user' => $user
+        );
+        $widgets_container->initialize($widgets_vars);
 
-        $form = $this->createForm(PostType::class, $postDTO);
-
-        //on traite éventuellement le formulaire si la requête est de type post
+        // handleRequest
         if($request->isMethod('POST')){
-            $form->handleRequest($request);
-            if($form->isSubmitted() && $form->isValid()){
-                $before_update = clone $post;
-                $post_dto = $form->getData();
-                $post_dto->mapTo($post);
-
-                if($post_dto->getOldCollections() !== $post->getCollections()->toArray()){
-                    $post_dto->addUpdatedData('collections', $post_dto->getOldCollections(), $post->getCollections()->toArray());
-                }
-
-                if($post_dto->getUpdatedDatas()){
-                    //dispatch MesClicsPostUpdateEvent
-                    $event = new MesClicsPostUpdateEvent($before_update, $post);
-                    $this->event_dispatcher->dispatch(MesClicsPostEvents::UPDATE, $event);
-
-                    // dispatch MesClicsPostCategorizationEvent if needed
-                    if($post_dto->getUpdatedData("collections")){
-                        $cat_event = new MesClicsPostCategorizationEvent($post_dto->getUpdatedData("collections")[0], $post_dto->getUpdatedData("collections")[1], $post);
-                        $this->event_dispatcher->dispatch(MesClicsPostEvents::CATEGORIZATION, $cat_event);
-                    }
-                }
-                
-                $this->entity_manager->flush();
-
-                $args['post_id'] = $post->getID();
-                return $this->redirectToRoute("mesclics_admin_post", $args);
-            }
+            $widgets_container->handleRequest($request);
+            $args['post_id'] = $post->getID();
+            return $this->redirectToRoute("mesclics_admin_post", $args);
         }
 
+        //Set template args
         $args = array(
             'currentSection' => 'edition',
             'subSection' => 'posts',
             'postSection' => 'edit',
-            'edit_post_form' => $form->createView(),
-            'currentPost' => $post
+            'currentPost' => $post,
+            'widgets' => $widgets_container->getWidgets()
         );
-
         //on ajoute les sub_args (popups si nécessaire)
         if($sub_args){
             $args = array_merge($args, $sub_args);

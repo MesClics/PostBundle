@@ -1,26 +1,26 @@
-{{ form_start(post_form) }}
+{{ form_start(form) }}
 
     <div class="oocss-form-fieldset">
-        {{ form_row(post_form.date_publication, {'label': 'date de mise en ligne', 'help': 'laisser vide pour enregistrer comme brouillon'}) }}
-        {{ form_row(post_form.visibilite, {'label': 'visibilité de la publication', 'attr': {'class': 'oocss-center-h'}}) }}
-        {{ form_row(post_form.date_peremption, {'label': 'date de dépublication'}) }}
+        {{ form_row(form.date_publication, {'label': 'date de mise en ligne', 'help': 'laisser vide pour enregistrer comme brouillon'}) }}
+        {{ form_row(form.visibilite, {'label': 'visibilité de la publication', 'attr': {'class': 'oocss-center-h'}}) }}
+        {{ form_row(form.date_peremption, {'label': 'date de dépublication'}) }}
     </div>
-    {{ form_row(post_form.title, {'label': 'titre de la publication', 'widget_attr': {'class': 'titre'}}) }}
-    {{ form_row(post_form.content, {'label': 'rédiger la publication'}) }}
+    {{ form_row(form.title, {'label': 'titre de la publication', 'widget_attr': {'class': 'titre'}}) }}
+    {{ form_row(form.content, {'label': 'rédiger la publication'}) }}
 
     <div class="oocss-form-fieldset oocss-vertical">
-        {{ form_row(post_form.collections_select, {'attr': {'class': 'oocss-full-container-width'}, 'label': 'associer à une collection', 'help': 'sélectionner une ou plusieurs collections existantes et/ou en créer de nouvelles'}) }}
-       {{ form_row(post_form.newcollections, {'attr': {'class': 'oocss-full-container-width'}, 'label': 'ajouter une collection', 'button': {'title': 'ajouter une collection', 'label': '+'}}) }}
+        {{ form_row(form.collections_select, {'attr': {'class': 'oocss-full-container-width'}, 'label': 'associer à une collection', 'help': 'sélectionner une ou plusieurs collections existantes et/ou en créer de nouvelles'}) }}
+       {{ form_row(form.newcollections, {'attr': {'class': 'oocss-full-container-width'}, 'label': 'ajouter une collection', 'button': {'title': 'ajouter une collection', 'label': '+'}}) }}
     </div>
     <div class="oocss-form-fieldset oocss-horizontal">
-        {{ form_row(post_form.submit, {'label': submit_label, 'attr': {'class': submit_class|default("")}}) }}
-            {% if currentPost is defined and currentPost.id is not null %}<div class="oocss-form-row oocss-justify-end">
-                <button class="oocss-button oocss-open-popup oocss-headed-block oocss-discret oocss-horizontal oocss-s publication-remove" data-popup-path={{ absolute_url(path('mesclics_admin_post_remove', {'post_id': currentPost.id})) }} title="supprimer la publication">Supprimer la publication</button>
+        {{ form_row(form.submit, {'label': submit_label, 'attr': {'class': submit_class|default("")}}) }}
+            {% if post is defined and post.id is not null %}<div class="oocss-form-row oocss-justify-end">
+                <button class="oocss-button oocss-open-popup oocss-headed-block oocss-discret oocss-horizontal oocss-s publication-remove" data-popup-path={{ absolute_url(path('mesclics_admin_post_remove', {'post_id': post.id})) }} title="supprimer la publication">Supprimer la publication</button>
             </div>
         {% endif %}
     </div>
-    {{ form_row(post_form._token) }}
-{{ form_end(post_form, {'render_rest': false}) }}
+    {{ form_row(form._token) }}
+{{ form_end(form, {'render_rest': false}) }}
 
 <!-- on ajoute le script pour le traitement dynamique du champ collections -->
 <script type="text/javascript">

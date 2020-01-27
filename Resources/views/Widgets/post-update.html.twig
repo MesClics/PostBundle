@@ -1,0 +1,10 @@
+<div class="oocss-widget highlight large posts-edit">
+    <div class="oocss-widget--head">
+        <h2 class="oocss-widget--title">Modifier la publication {{ currentPost.title }}</h2>
+    </div>
+
+    <div class="oocss-widget--content">
+        {% include "MesClicsPostBundle:Widgets:post-form.html.twig" with { submit_label: 'enregistrer les modifications', submit_class : 'oocss-headed-block oocss-horizontal oocss-s save' } %}
+    </div>
+
+</div>
