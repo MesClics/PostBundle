@@ -19,11 +19,9 @@ class PostDTO extends DataTransportObjectToEntity{
     private $collections_select;
     private $newcollections;
     private $old_collections;
-    private $entity_manager;
 
-    public function __construct(EntityManagerInterface $em){
+    public function __construct(){
         parent::__construct();
-        $this->entity_manager = $em;
         $this->collections_select = array();
     }
 
