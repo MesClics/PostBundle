@@ -29,7 +29,6 @@ class BackendCommentController extends Controller{
         $this->event_dispatcher = $event_dispatcher;
         $this->token_storage = $token_storage;
     }
-
     
     /**
      * @ParamConverter("post", options={"mapping": {"post_id": "id"}})

@@ -1,0 +1,28 @@
+{% if posts is not empty %}
+    <div class="oocss-widget comment small highlight2">
+        <div class="oocss-widget--head">
+            <h2 class="oocss-widget--title">Commentaires d'édition épinglés</h2>
+        </div>
+
+        <div class="oocss-widget--content">
+            {% for post in posts %}
+                {% if widget.pinnedComments(post) is not empty %}
+                    <div class="oocss-block oocss-vertical comments">
+                        <h3>dans la publication <a href={{ path('mesclics_admin_post', {'post_id': post.id}) }} title="voir la publication">"{{ post.title }}"</a></h3>
+                        {% for comment in widget.pinnedComments(post)|reverse %}
+                        <div class="oocss-card">
+                            {% if comment.parent is not null and comment.parent.isPinned == false %}
+                                <h4>En réponse au commentaire de {{ comment.parent.author.username }} du {{ comment.parent.updatedAt|date("d/m/Y \à H:i")}}</h4>
+                                <p>{{ comment.parent.content }}</p>
+                            {% endif %}
+                            {% include "MesClicsPostBundle:Templates:backend-comment.html.twig" with {'comment': comment, 'post': post} %}
+
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+            {% endfor %}
+        </div>
+    </div>    
+{% endif %}

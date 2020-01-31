@@ -18,7 +18,6 @@
         {% endif %}
         <button data-path={{ path('mesclics_admin_post_backend_comment_reply', {'post_id': post.id, 'comment_id': comment.id}) }} data-target-selector={{ "." ~ commentClass }} class="oocss-button oocss-interface comment oocss-html-adder" title="répondre">répondre</button>
         <button class="oocss-button oocss-interface oocss-html-modifier pin {% if comment.isPinned %} oocss-pinned{% endif %}" data-path={{ path('mesclics_admin_post_backend_comment_pin', {'comment_id': comment.id, 'post_id': post.id}) }} title="{% if not comment.isPinned %} épingler le commentaire{% else %}retirer l'épingle{% endif %}">{% if not comment.isPinned %} épingler le commentaire{% else %}retirer l'épingle{% endif %}</button>
-        {#<a class="oocss-button oocss-interface pin" href={{ absolute_url(path('mesclics_admin_post_backend_comment_pin', {'comment_id': comment.id, 'post_id': post.id})) }} data-target-selector={{ "." ~ commentClass }} title="épingler">épingler</a>#}
         {# TODO: only if comment has no children #}
         <button class="oocss-button oocss-interface remove oocss-open-popup" title="supprimer"
             data-popup-path={{ path("mesclics_admin_post_backend_comment_remove", {'post_id': post.id, 'comment_id': comment.id})}}>supprimer</button>
