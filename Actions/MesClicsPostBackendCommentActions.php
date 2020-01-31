@@ -41,8 +41,11 @@ class MesClicsPostBackendCommentActions{
     }
 
     public static function onPin(Comment $comment, Post $post){
-        $message = "Epinglage du commentaire publié par " . $comment->getAuthor()->getUsername() . " le " . $comment->getUpdatedAt()->format("d/m/Y à H:i") . " pour la puiblication " . $post->getTitle();
-
+        if($comment->isPinned()){
+            $message = "Epinglage du commentaire publié par " . $comment->getAuthor()->getUsername() . " le " . $comment->getUpdatedAt()->format("d/m/Y à H:i") . " pour la publication " . $post->getTitle();
+        } else{
+            $message = "Désépinglage du commentaire publié par " . $comment->getAuthor()->getUsername() . " le " . $comment->getUpdatedAt()->format("d/m/Y à H:i") . " pour la publication " . $post->getTitle();
+        }
         $objects = array(
             "post" => $post,
             "comment" => $comment

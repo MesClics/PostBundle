@@ -67,14 +67,17 @@ class MesClicsPostBackendCommentEventSubscriber implements EventSubscriberInterf
     }
 
     public function onPin(MesClicsPostBackendCommentPinEvent $event){
-        if($event->getComment()->isPinned()){
             $label = "success";
+            
+        if($event->getComment()->isPinned()){
             $message = "Votre commentaire d'édtion a bien été épinglé.";
-
-            MesClicsFunctions::addFlash($label, $message, $this->session);
-
-            $action = MesClicsPostBackendCommentActions::onPin($event->getComment(), $event->getPost());
-            $this->navigator->addAction($action);
+        } else{
+            $message = "Votre commentaire d'édtion a bien été désépinglé.";
         }
+
+        MesClicsFunctions::addFlash($label, $message, $this->session);
+
+        $action = MesClicsPostBackendCommentActions::onPin($event->getComment(), $event->getPost());
+        $this->navigator->addAction($action);
     }
 }
