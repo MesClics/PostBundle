@@ -5,6 +5,7 @@ namespace MesClics\PostBundle\Widget;
 use MesClics\PostBundle\Entity\Post;
 use MesClicsBundle\Entity\MesClicsUser;
 use MesClics\PostBundle\Widget\PostEditWidget;
+use MesClics\PostBundle\Widget\EditionNavWidget;
 use MesClics\UtilsBundle\Widget\WidgetsContainer;
 use MesClics\PostBundle\Widget\PostBackendCommentsWidget;
 use MesClics\PostBundle\Widget\Handler\PostEditWidgetHandler;
@@ -23,6 +24,7 @@ class PostUpdateWidgets extends WidgetsContainer{
     }
 
     public function initialize($params = array()){
+        $this->addWidget(new EditionNavWidget());
         // if first call or post or user changes
         if($this->post !== $params['post'] || $this->user !== $params['user']){
             $this->setPost($params['post']);

@@ -2,6 +2,7 @@
 namespace MesClics\PostBundle\Widget;
 
 use MesClics\PostBundle\Widget\PostsListWidget;
+use MesClics\PostBundle\Widget\EditionNavWidget;
 use MesClics\UtilsBundle\Widget\WidgetsContainer;
 use MesClics\PostBundle\PostRetriever\PostRetriever;
 use MesClics\PostBundle\Widget\Handler\PostsListWidgetHandler;
@@ -15,6 +16,7 @@ class PostsHomeWidgets extends WidgetsContainer{
     }
     
     public function initialize($params = array()){
+        $this->addWidget(new EditionNavWidget());
         $this->addWidget(new PostsListWidget($this->posts_list_handler));
     }
 }

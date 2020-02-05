@@ -39,8 +39,10 @@ class PostController extends Controller
         $widgets_container->handleRequest($request);
 
         $args = array(
-            'currentSection' => 'édition',
-            'subSection' => 'posts',
+            'navRails' => array(
+                'edition' => $this->generateUrl('mesclics_admin_edition'),
+                'publications' => 'mesclics_admin_posts'
+            ),
             'widgets' => $widgets_container->getWidgets()
         );
 
@@ -49,7 +51,7 @@ class PostController extends Controller
             $args = array_merge($args, $sub_args);
         }
 
-        return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
+        return $this->render('MesClicsAdminBundle::layout.html.twig', $args);
     }
 
     /**
@@ -72,12 +74,14 @@ class PostController extends Controller
         }
 
         $args = array(
-            'currentSection' => 'edition',
-            'subSection' => 'posts',
-            'postSection' => 'edit',
+            'navRails' => array(
+                'edition' => $this->generateUrl('mesclics_admin_edition'),
+                'publications' => $this->generateUrl('mesclics_admin_posts'),
+                'nouvelle publication' => $this->generateUrl('mesclics_admin_posts_new')
+            ),
             'widgets' => $widgets_container->getWidgets()
         );
-        return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
+        return $this->render('MesClicsAdminBundle::layout.html.twig', $args);
     }
 
     /**
@@ -107,10 +111,11 @@ class PostController extends Controller
 
         //Set template args
         $args = array(
-            'currentSection' => 'edition',
-            'subSection' => 'posts',
-            'postSection' => 'edit',
-            'currentPost' => $post,
+            'navRails' => array(
+                'edition' => $this->generateUrl('mesclics_admin_edition'),
+                'publications' => $this->generateUrl('mesclics_admin_posts'),
+                $post->getTitle() => $this->generateUrl('mesclics_admin_post', array('post_id' => $post->getID()))
+            ),
             'widgets' => $widgets_container->getWidgets()
         );
         //on ajoute les sub_args (popups si nécessaire)
@@ -118,7 +123,7 @@ class PostController extends Controller
             $args = array_merge($args, $sub_args);
         }
 
-        return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
+        return $this->render('MesClicsAdminBundle::layout.html.twig', $args);
     }
 
 

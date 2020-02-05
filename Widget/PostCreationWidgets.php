@@ -2,6 +2,7 @@
 
 namespace MesClics\PostBundle\Widget;
 
+use MesClics\PostBundle\Widget\EditionNavWidget;
 use MesClics\UtilsBundle\Widget\WidgetsContainer;
 use MesClics\PostBundle\Widget\PostCreationWidget;
 use MesClics\PostBundle\Widget\Handler\PostCreationWidgetHandler;
@@ -15,6 +16,7 @@ class PostCreationWidgets extends WidgetsContainer{
     }
 
     public function initialize($params = array()){
+        $this->addWidget(new EditionNavWidget());
         $this->addWidget(new PostCreationWidget($params['author'], $this->post_creation_handler));
     }
 }
