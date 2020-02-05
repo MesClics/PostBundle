@@ -2,6 +2,7 @@
 
 namespace MesClics\PostBundle\Widget\Handler;
 
+use Symfony\Component\Workflow\Exception\InvalidArgumentException;
 use MesClics\UtilsBundle\Widget\Widget;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +20,9 @@ class PostsListWidgetHandler extends WidgetHandler{
     }
 
     public function handleRequest(Widget $widget, Request $request){
+        if(!$widget instanceof PostsListWidget){
+            throw new InvalidArgumentException(__METHOD__.' expects instance of PostsListWidget as first argument, ' . get_class($widget) . ' instance given.');
+        }
         //on ajoute les éventuels paramètres de tri
         //on établit d'abord la liste des éventuels paramètres de tri des résultats qu'on passera au postRetriever :
         $order_params = array(
