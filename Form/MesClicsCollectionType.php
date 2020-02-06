@@ -3,6 +3,7 @@
 namespace MesClics\PostBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use MesClics\PostBundle\Form\DTO\CollectionDTO;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -34,7 +35,7 @@ class MesClicsCollectionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MesClics\PostBundle\Entity\Collection',
+            'data_class' => CollectionDTO::class,
             'available_collections' => null
         ));
     }

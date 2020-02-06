@@ -2,14 +2,15 @@
 
 namespace MesClics\PostBundle\Widget\Handler;
 
-use Symfony\Component\Workflow\Exception\InvalidArgumentException;
 use MesClics\UtilsBundle\Widget\Widget;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use MesClics\PostBundle\Widget\PostsListWidget;
 use Symfony\Component\Form\FormFactoryInterface;
 use MesClics\PostBundle\PostRetriever\PostRetriever;
 use MesClics\UtilsBundle\Widget\Handler\WidgetHandler;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Workflow\Exception\InvalidArgumentException;
 
 class PostsListWidgetHandler extends WidgetHandler{
     protected $post_retriever;
