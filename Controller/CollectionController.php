@@ -7,6 +7,7 @@ use MesClics\PostBundle\Entity\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use MesClics\PostBundle\Form\MesClicsCollectionType;
 use MesClics\PostBundle\Widget\CollectionsHomeWidgets;
+use MesClics\PostBundle\Widget\CollectionCreationWidgets;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use MesClics\PostBundle\Form\FormManager\CollectionFormManager;
@@ -29,6 +30,9 @@ class CollectionController extends Controller{
             'available_collections' => $this->available_collections
         );
         $widgets->initialize($params);
+        // add class to collection_creation widget
+        $widgets->getWidget('collection_creation')->addClass("highlight2");
+
         $widgets->handleRequest($request);
         $args = array(
             'navRails' => array(
@@ -37,70 +41,29 @@ class CollectionController extends Controller{
             ),
             'widgets' => $widgets->getWidgets()
         );
-        //on récupère la liste des collections déjà existantes
-
-        //on ajoute un formulaire pour l'ajout de collection
-        // $options = array(
-        //     "available_collections" => $this->available_collections
-        // );
-        // $collection = new Collection();
-        // $new_collection_form = $this->createForm(MesClicsCollectionType::class, $collection, $options);
-        // if($request->isMethod('POST')){
-        //     $this->collection_form_manager->handle($new_collection_form);
-        //     if($this->collection_form_manager->hasSucceeded()){
-        //         return $this->redirectToRoute('mesclics_admin_collection', array('collection_id' => $collection->getId()));
-        //     }
-        // }
-        // //on renvoie la vue permettant 'laffichage de la liste des collections
-        // $args = array(
-        //     "currentSection" => "edition",
-        //     "subSection" => "collections",
-        //     "collections" => $collections
-        // );
-
-        // //add a form to quickly add a new collection
-        // $collection = new Collection();
-        // $options['available_collections'] = $this->available_collections;
-        // $collection_form = $this->createForm(MesClicsCollectionType::class, $collection, $options);
-        // $this->collection_form_manager->handle($collection_form);
-
-        // if($request->isMethod('POST')){
-        //     if($this->collection_form_manager->hasSucceeded()){
-        //         return $this->redirectToRoute('mesclics_admin_collection', array('collection_id' => $collection->getId()));            }
-        // }
-
-        // $args['collection_form'] = $collection_form->createView();
 
         return $this->render('MesClicsAdminBundle::layout.html.twig', $args);
     }
 
-    public function newAction(Request $request){
-        //on crée un objet collection
-        $collection = new Collection();
-        //on crée un formulaire
-        $options['available_collections'] = $this->available_collections;
+    public function newAction(CollectionCreationWidgets $widgets, Request $request){
+        $params = array(
+            'available_collections' => $this->available_collections
+        );
 
-        //on récupère les collections par type d'objets
-        $collections = $this->repo->getCollections();
-
-        $form = $this->createForm(MesClicsCollectionType::class, $collection, $options);
-        if($request->isMethod('POST')){
-            //on initialise le form_manager
-            $form_manager = $this->collection_form_manager;
-            $form_manager->handle($form);
-            if($form_manager->hasSucceeded()){
-                return $this->redirectToRoute('mesclics_admin_collections');
-            }
-        }
+        $widgets->initialize($params);
+        // add class to widget
+        $widgets->getWidget('collection_creation')->addClass('highlight');
+        $widgets->handleRequest($request);
 
         $args = array(
-            'currentSection' => 'edition',
-            'subSection' => 'collections',
-            'collectionSection' => 'new',
-            'new_collection_form' => $form->createView(),
-            'collections' => $collections
+            'navRails' => array(
+                "edition" => $this->generateUrl('mesclics_admin_edition'),
+                "collections" => $this->generateUrl('mesclics_admin_collections'),
+                "nouvelle collection" => $this->generateUrl('mesclics_admin_collections_new')
+            ),
+            'widgets' => $widgets->getWidgets()
         );
-        return $this->render('MesClicsAdminBundle:Panel:edition.html.twig', $args);
+        return $this->render('MesClicsAdminBundle::layout.html.twig', $args);
     }
 
     
